@@ -21,6 +21,9 @@ int yylex(void);
 %token NOT_EQUAL EQUAL MENOR_IGUAL MAIOR_IGUAL MENOR_QUE MAIOR_QUE
 %token REMARK PRINT LET IF THEN GOTO STOP RUN END DIM DATA CLOSE FOR TO STEP INPUT OUTPUT GOSUB NEXT OPEN AS POKE RETURN READ RESTORE SYS WAIT OR AND NOT
 
+%type <intval> expression and_exp  value compare_exp not_exp mult_exp negate_exp add_exp power_exp
+
+
 %%
 lines:
      INTEGER statements NEWLINE lines
@@ -68,8 +71,8 @@ integer_list:
 	    | INTEGER
 	    ;
 
-expression:
-	  and_exp OR expression { $$ = $1 || $3; }
+expression: INTEGER { $$ = $1; }
+	  | and_exp OR expression { $$ = $1 || $3; }
 	  | and_exp
 	  ;
 
@@ -106,8 +109,8 @@ value_list:
 	  | value
 	  ;
 
-and_exp:
-       not_exp AND and_exp {$$ = $1 && $3; }
+and_exp: INTEGER { $$ = $1; }
+	   | not_exp AND and_exp {$$ = $1 && $3; }
        | not_exp
        ;
 
@@ -116,8 +119,8 @@ not_exp:
        | compare_exp
        ;
 
-compare_exp: 
-       add_exp EQUAL compare_exp { $1 == $3; }
+compare_exp: INTEGER { $$ = $1; }
+	   | add_exp EQUAL compare_exp { $1 == $3; }
        | add_exp NOT_EQUAL compare_exp { $1 != $3; }
        | add_exp MAIOR_QUE compare_exp { $1 > $3; }
        | add_exp MAIOR_IGUAL compare_exp { $1 >= $3; }
@@ -129,14 +132,14 @@ compare_exp:
 
 
 
-add_exp: 
-       mult_exp PLUS add_exp { $$ = $1 + $3; }
+add_exp: INTEGER { $$ = $1; }
+	   | mult_exp PLUS add_exp { $$ = $1 + $3; }
        | mult_exp MINUS add_exp { $$ = $1 - $3; }
        | mult_exp
        ;
 
-mult_exp: 
-	negate_exp MULT mult_exp { $$ = $1 * $3; }
+mult_exp: INTEGER { $$ = $1; }
+	|negate_exp MULT mult_exp { $$ = $1 * $3; }
 	| negate_exp DIV mult_exp { $$ = $1 / $3; }
 	| negate_exp
 	;
@@ -145,10 +148,10 @@ negate_exp:
 	  | power_exp
 	  ;
 
-power_exp: 
-	 power_exp POW value { $$ = $1 ** $3; }
-	 | value
-	 ;
+power_exp: INTEGER { $$ = $1; }
+	| power_exp POW value { $$ = $1 ** $3; }
+	| value
+	;
 
 constant:
 	INTEGER
