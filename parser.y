@@ -1,5 +1,6 @@
 %{
 #include <stdio.h>
+#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -115,7 +116,7 @@ and_exp: INTEGER { $$ = $1; }
        ;
 
 not_exp:
-       NOT compare_exp {$$ = !$2}
+       NOT compare_exp {$$ = !$2; }
        | compare_exp
        ;
 
@@ -149,7 +150,7 @@ negate_exp:
 	  ;
 
 power_exp: INTEGER { $$ = $1; }
-	| power_exp POW value { $$ = $1 ** $3; }
+	| power_exp POW value 
 	| value
 	;
 
@@ -166,5 +167,8 @@ void yyerror(const char *s) {
 }
 
 int main(void) {
+    //FILE inFile = fopen();
+
     return yyparse();
 }
+
