@@ -2,6 +2,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
+#include "constantlist.h"
+#include "integerlist.h"
+#include "printlist.h"
+#include "expressionlist.h"
+#include "idlist.h"
+#include "valuelist.h"
 
 void yyerror(const char *s);
 int yylex(void);
@@ -11,6 +18,12 @@ int yylex(void);
     int intval;          
     double realval;
     char* strval;
+    struct ConstantNode* const_list;
+    struct IntegerNode* int_list;
+    struct PrintNode* print_list;
+	struct IDNode* id_list;
+	struct ValueNode* value_list;
+    struct ExpressionNode* expr_list;
   }
 
 %token <intval> INTEGER
@@ -22,7 +35,12 @@ int yylex(void);
 %token REMARK PRINT LET IF THEN GOTO STOP RUN END DIM DATA CLOSE FOR TO STEP INPUT OUTPUT GOSUB NEXT OPEN AS POKE RETURN READ RESTORE SYS WAIT OR AND NOT
 
 %type <intval> expression and_exp  value compare_exp not_exp mult_exp negate_exp add_exp power_exp
-
+%type <const_list> constant_list constant
+%type <int_list> integer_list
+%type <print_list> print_list
+%type <id_list> id_list
+%type <value_list> value_list
+%type <expr_list> expression_list
 
 %%
 lines:
@@ -62,25 +80,25 @@ statement:
 	 ;
 
 constant_list:
-	     constant VIRGULA constant_list
-	     | constant
+	     constant VIRGULA constant_list {$$ = append_const_node($3, $1); }
+	     | constant { $$ = $1; }
 	     ;
 
 integer_list:
-	    INTEGER VIRGULA integer_list
-	    | INTEGER
+	    INTEGER VIRGULA integer_list { $$ = append_intlist_node($3, create_intlist_onde($1)); }
+	    | INTEGER { $$ = $1; }
 	    ;
 
-expression: INTEGER { $$ = $1; }
-	  | and_exp OR expression { $$ = $1 || $3; }
-	  | and_exp
+expression:
+	and_exp OR expression { $$ = $1 || $3; }
+	  | and_exp { $$ = $1; }
 	  ;
 
 value:
      LPAREN expression RPAREN { $$ = $2; }
-     | ID
-     | ID LPAREN expression_list RPAREN
-     | constant
+     | ID { $$ = 0; } // placeholder
+     | ID LPAREN expression_list RPAREN { $$ = 0; } // placeholder
+     | constant { $$ = $1; }
      ;
 
 access:
@@ -89,74 +107,74 @@ access:
       ;
 
 id_list:
-       ID VIRGULA id_list
-       | ID
-       ;
+     ID VIRGULA id_list { $$ = append_id_node($3, $1); }
+     | ID { $$ = $1; }
+     ;
 
 expression_list:
-	       expression VIRGULA expression_list
-	       | expression
-	       ;
-
-print_list:
-	  expression PONTO_VIRGULA print_list
-	  | expression
-	  |
-	  ;
+     expression VIRGULA expression_list { $$ = append_expression_node($3, $1); }
+     | expression { $$ = $1; }
+     ;
 
 value_list:
-	  value VIRGULA value_list
-	  | value
-	  ;
+     value VIRGULA value_list { $$ = append_value_node($3, $1); }
+     | value { $$ = $1; }
+     ;
 
-and_exp: INTEGER { $$ = $1; }
-	   | not_exp AND and_exp {$$ = $1 && $3; }
-       | not_exp
+print_list:
+     expression PONTO_VIRGULA print_list { $$ = append_print_node($3, create_print_node($1)); }
+     | expression { $$ = $1; }
+     |  { $$ = NULL; }
+     ;
+
+and_exp: 
+	not_exp AND and_exp {$$ = $1 && $3; }
+       | not_exp { $$ = $1; }
        ;
 
 not_exp:
        NOT compare_exp {$$ = !$2}
-       | compare_exp
+       | compare_exp { $$ = $1; }
        ;
 
-compare_exp: INTEGER { $$ = $1; }
-	   | add_exp EQUAL compare_exp { $1 == $3; }
-       | add_exp NOT_EQUAL compare_exp { $1 != $3; }
-       | add_exp MAIOR_QUE compare_exp { $1 > $3; }
-       | add_exp MAIOR_IGUAL compare_exp { $1 >= $3; }
-       | add_exp MENOR_QUE compare_exp { $1 < $3; }
-       | add_exp MENOR_IGUAL compare_exp { $1 <= $3; }
-       | add_exp
+compare_exp:
+	add_exp EQUAL compare_exp { $$ = $1 == $3; }
+       | add_exp NOT_EQUAL compare_exp { $$ = $1 != $3; }
+       | add_exp MAIOR_QUE compare_exp { $$ = $1 > $3; }
+       | add_exp MAIOR_IGUAL compare_exp { $$ = $1 >= $3; }
+       | add_exp MENOR_QUE compare_exp { $$ = $1 < $3; }
+       | add_exp MENOR_IGUAL compare_exp { $$ = $1 <= $3; }
+       | add_exp { $$ = $1; }
        ;
 
 
 
 
-add_exp: INTEGER { $$ = $1; }
-	   | mult_exp PLUS add_exp { $$ = $1 + $3; }
+add_exp: 
+	mult_exp PLUS add_exp { $$ = $1 + $3; }
        | mult_exp MINUS add_exp { $$ = $1 - $3; }
-       | mult_exp
+       | mult_exp { $$ = $1; }
        ;
 
-mult_exp: INTEGER { $$ = $1; }
-	|negate_exp MULT mult_exp { $$ = $1 * $3; }
+mult_exp:
+	negate_exp MULT mult_exp { $$ = $1 * $3; }
 	| negate_exp DIV mult_exp { $$ = $1 / $3; }
-	| negate_exp
+	| negate_exp { $$ = $1; }
 	;
 negate_exp: 
-	  MINUS power_exp { $$ = - $2; }
-	  | power_exp
+	  MINUS power_exp { $$ = - ($2); }
+	  | power_exp { $$ = $1; }
 	  ;
 
-power_exp: INTEGER { $$ = $1; }
-	| power_exp POW value { $$ = $1 ** $3; }
-	| value
+power_exp: 
+	power_exp POW value { $$ = pow($1,$3); }
+	| value { $$ = $1; }
 	;
 
 constant:
-	INTEGER
-	| STRING
-	| REAL
+	INTEGER { $$ = create_int_node($1); }
+	| STRING { $$ = create_string_node($1); }
+	| REAL { $$ = create_real_node($1); }
 	;
 
 %%
