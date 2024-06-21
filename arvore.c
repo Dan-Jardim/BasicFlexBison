@@ -27,3 +27,11 @@ StatementNode* create_dim_statement(char* id, IntegerList* integer_list) {
     node->next = NULL;
     return node;
 }
+
+StatementNode* create_remark_statement(char* remark_text) {
+    StatementNode* node = (StatementNode*) malloc(sizeof(StatementNode));
+    node->type = REMARK_STMT;
+    node->remark_text = strdup(remark_text);
+    node->next = NULL;
+    return node;
+}

@@ -51,33 +51,32 @@ statements:
 	  statement DOIS_PONTOS statements
 	  | statement
 	  ;
-statement:  
-     CLOSE HASH INTEGER
-	 | DATA constant_list
-	 | DIM ID LPAREN integer_list RPAREN
-	 | END
-	 | FOR ID EQUAL expression TO expression
-	 | FOR ID EQUAL expression TO expression STEP INTEGER
-	 | GOTO expression
-	 | GOSUB expression
-	 | IF expression THEN statement
-	 | INPUT id_list
-	 | INPUT HASH INTEGER VIRGULA id_list
-	 | LET ID EQUAL expression
-	 | NEXT id_list
-	 | OPEN value FOR access AS HASH INTEGER
-	 | POKE value_list
-	 | PRINT print_list
-	 | PRINT HASH INTEGER VIRGULA print_list
-	 | READ id_list
-	 | RETURN
-	 | RESTORE
-	 | RUN
-	 | STOP
-	 | SYS value
-	 | WAIT value_list
-	 | REMARK
-	 ;
+statement : CLOSE HASH INTEGER { $$ = create_close_statement($3, 0); }
+          | DATA constant_list { $$ = create_data_statement($2); }
+          | DIM ID LPAREN integer_list RPAREN { $$ = create_dim_statement($2, $4); }
+          | END { $$ = create_end_statement(); }
+          | FOR ID EQUAL expression TO expression { $$ = create_for_statement($2, $4, $6, NULL); }
+          | FOR ID EQUAL expression TO expression STEP INTEGER { $$ = create_for_statement($2, $4, $6, $8); }
+          | GOTO expression { $$ = create_goto_statement($2); }
+          | GOSUB expression { $$ = create_gosub_statement($2); }
+          | IF expression THEN statement { $$ = create_if_statement($2, $4); }
+          | INPUT id_list { $$ = create_input_statement($2); }
+          | INPUT HASH INTEGER COMMA id_list { $$ = create_input_hash_statement($3, $5); }
+          | LET ID EQUAL expression { $$ = create_let_statement($2, $4); }
+          | NEXT id_list { $$ = create_next_statement($2); }
+          | OPEN value FOR access AS HASH INTEGER { $$ = create_open_statement($2, $4, $8); }
+          | POKE value_list { $$ = create_poke_statement($2); }
+          | PRINT print_list { $$ = create_print_statement($2); }
+          | PRINT HASH INTEGER COMMA print_list { $$ = create_print_hash_statement($3, $5); }
+          | READ id_list { $$ = create_read_statement($2); }
+          | RETURN { $$ = create_return_statement(); }
+          | RESTORE { $$ = create_restore_statement(); }
+          | RUN { $$ = create_run_statement(); }
+          | STOP { $$ = create_stop_statement(); }
+          | SYS value { $$ = create_sys_statement($2); }
+          | WAIT value_list { $$ = create_wait_statement($2); }
+          | REMARK remark_text { $$ = create_remark_statement(); }
+          ;
 
 constant_list:
 	     constant VIRGULA constant_list {$$ = append_const_node($3, $1); }
@@ -175,6 +174,18 @@ constant:
 	INTEGER { $$ = create_constant_integer_node($1); }
 	| STRING { $$ = create_constant_string_node($1); }
 	| REAL { $$ = create_constant_real_node($1); }
+	;
+
+remark_text: 
+	| REMARK_STRING { if ($$ == NULL) {
+                    $$ = strdup($2);
+                	} else {
+                    	char* temp = $$;
+                    	$$ = (char*) malloc(strlen(temp) + strlen($2) + 1);
+                    	strcpy($$, temp);
+                    	strcat($$, $2);
+                    	free(temp);
+                	} }
 	;
 
 %%
