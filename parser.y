@@ -172,9 +172,9 @@ power_exp:
 	;
 
 constant:
-	INTEGER { $$ = create_int_node($1); }
-	| STRING { $$ = create_string_node($1); }
-	| REAL { $$ = create_real_node($1); }
+	INTEGER { $$ = create_constant_integer_node($1); }
+	| STRING { $$ = create_constant_string_node($1); }
+	| REAL { $$ = create_constant_real_node($1); }
 	;
 
 %%
