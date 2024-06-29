@@ -1,8 +1,14 @@
 #ifndef ARVORE_H
 #define ARVORE_H
 
-typedef enum {
+#include "constantlist.h"
+#include "integerlist.h"
+#include "printlist.h"
+#include "expressionlist.h"
+#include "idlist.h"
+#include "valuelist.h"
 
+typedef enum {
     CLOSE_STMT,
     DATA_STMT,
     DIM_STMT,
@@ -25,7 +31,6 @@ typedef enum {
     SYS_STMT,
     WAIT_STMT,
     REMARK_STMT
-
 } StatementType;
 
 typedef struct StatementNode {
@@ -36,7 +41,6 @@ typedef struct StatementNode {
             int integer_value;
         } close;
         struct {
-           
             ConstantList* constant_list;
         } data;
         struct {
@@ -76,12 +80,13 @@ typedef struct StatementNode {
         } print_stmt;
         struct {
             char* remark_text;
-        }
-        ValueNode* sys_value;
+        } remark;
+        struct {
+            ValueNode* sys_value;
+        } sys;
     } statement;
     struct StatementNode* next; // Próximo nó de instrução na lista
 } StatementNode;
-
 
 typedef struct LineNode {
     int line_number;        
@@ -89,11 +94,9 @@ typedef struct LineNode {
     struct LineNode* next;  
 } LineNode;
 
-
 typedef struct ProgramNode {
     LineNode* first_line;  
 } ProgramNode;
-
 
 StatementNode* create_close_statement(int hash_value, int integer_value);
 StatementNode* create_data_statement(ConstantList* constant_list);
@@ -118,10 +121,9 @@ StatementNode* create_run_statement();
 StatementNode* create_stop_statement();
 StatementNode* create_sys_statement(ValueNode* value);
 StatementNode* create_wait_statement(ValueList* value_list);
-StatementNode* create_remark_statement();
+StatementNode* create_remark_statement(char* remark_text);
 
 LineNode* create_line_node(int line_number, StatementNode* statement, LineNode* next_line);
 ProgramNode* create_program_node(LineNode* first_line);
-
 
 #endif

@@ -25,8 +25,8 @@ $(EXEC): $(OBJS) constantlist.o integerlist.o printlist.o idlist.o expressionlis
 parser.tab.c parser.tab.h: parser.y
 	bison -d parser.y
 
-lex.yy.c: lexer.l parser.tab.h
-	flex lexer.l
+lex.yy.c: scanner.l parser.tab.h
+	flex scanner.l
 
 constantlist.o: constantlist.c constantlist.h
 	$(CC) $(CFLAGS) -c constantlist.c
@@ -36,6 +36,15 @@ integerlist.o: integerlist.c integerlist.h
 
 printlist.o: printlist.c printlist.h
 	$(CC) $(CFLAGS) -c printlist.c
+
+idlist.o: idlist.c idlist.h
+	$(CC) $(CFLAGS) -c idlist.c
+
+expressionlist.o: expressionlist.c expressionlist.h
+	$(CC) $(CFLAGS) -c expressionlist.c
+
+valuelist.o: valuelist.c valuelist.h
+	$(CC) $(CFLAGS) -c valuelist.c
 
 clean:
 	rm -f $(OBJS) $(EXEC) *.o
