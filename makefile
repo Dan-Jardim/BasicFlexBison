@@ -4,13 +4,13 @@
 CC = gcc
 
 # Flags de compilação
-CFLAGS = -Wall -g
+CFLAGS = -Wall -g -Wno-unused-function
 
 # Lista dos arquivos fonte
-SRCS = parser.y scanner.l constantlist.c integerlist.c printlist.c idlist.c expressionlist.c valuelist.c
+SRCS = parser.y scanner.l constantlist.c integerlist.c printlist.c idlist.c expressionlist.c valuelist.c arvore.c utils.c access.c
 
 # Objetos gerados pelo Bison e pelo Flex
-OBJS = parser.tab.c lex.yy.c
+OBJS = parser.tab.o lex.yy.o constantlist.o integerlist.o printlist.o idlist.o expressionlist.o valuelist.o arvore.o utils.o access.o
 
 # Nome do executável a ser gerado
 EXEC = basic
@@ -19,11 +19,11 @@ EXEC = basic
 
 all: $(EXEC)
 
-$(EXEC): $(OBJS) constantlist.o integerlist.o printlist.o idlist.o expressionlist.o valuelist.o
-	$(CC) $(CFLAGS) $(OBJS) constantlist.o integerlist.o printlist.o idlist.o expressionlist.o valuelist.o -o $(EXEC) -lm
+$(EXEC): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(EXEC) -lm
 
 parser.tab.c parser.tab.h: parser.y
-	bison -d parser.y
+	bison -d -t -v parser.y > parsing_table.txt
 
 lex.yy.c: scanner.l parser.tab.h
 	flex scanner.l
@@ -45,6 +45,15 @@ expressionlist.o: expressionlist.c expressionlist.h
 
 valuelist.o: valuelist.c valuelist.h
 	$(CC) $(CFLAGS) -c valuelist.c
+
+arvore.o: arvore.c arvore.h
+	$(CC) $(CFLAGS) -c arvore.c
+
+utils.o: utils.c utils.h
+	$(CC) $(CFLAGS) -c utils.c
+
+access.o: access.c access.h
+	$(CC) $(CFLAGS) -c access.c
 
 clean:
 	rm -f $(OBJS) $(EXEC) *.o

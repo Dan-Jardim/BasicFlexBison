@@ -10,8 +10,9 @@ typedef struct {
     IdNode* head;
 } IdList;
 
-IdList* create_id_list();
-void add_id(IdList* list, char* id);
-void free_id_list(IdList* list);
+IdNode* create_id_node(char* id);
+IdNode* append_id_node(IdNode* list, IdNode* new_node);
+void free_id_list(IdNode* list);
+void print_id_node(IdNode* id_node, int depth);
 
 #endif

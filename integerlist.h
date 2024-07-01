@@ -10,8 +10,8 @@ typedef struct {
     IntegerNode* head;
 } IntegerList;
 
-IntegerList* create_integer_list();
-void add_integer(IntegerList* list, int value);
-void free_integer_list(IntegerList* list);
+IntegerNode* create_integer_node(int value);
+IntegerNode* append_int_node(IntegerNode* list, IntegerNode* new_node);
+void free_integer_list(IntegerNode* list);
 
 #endif

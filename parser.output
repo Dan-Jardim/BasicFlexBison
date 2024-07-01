@@ -1,0 +1,1876 @@
+Terminals unused in grammar
+
+   PONTO
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: lines
+
+    2 lines: INTEGER statements NEWLINE lines
+    3      | INTEGER statements NEWLINE
+
+    4 statements: statement DOIS_PONTOS statements
+    5           | statement
+
+    6 statement: CLOSE HASH INTEGER
+    7          | DATA constant_list
+    8          | DIM ID LPAREN integer_list RPAREN
+    9          | END
+   10          | FOR ID EQUAL expression TO expression
+   11          | FOR ID EQUAL expression TO expression STEP INTEGER
+   12          | GOTO expression
+   13          | GOSUB expression
+   14          | IF expression THEN statement
+   15          | INPUT id_list
+   16          | INPUT HASH INTEGER VIRGULA id_list
+   17          | LET ID EQUAL expression
+   18          | NEXT id_list
+   19          | OPEN value FOR access AS HASH INTEGER
+   20          | POKE value_list
+   21          | PRINT print_list
+   22          | PRINT HASH INTEGER VIRGULA print_list
+   23          | READ id_list
+   24          | RETURN
+   25          | RESTORE
+   26          | RUN
+   27          | STOP
+   28          | SYS value
+   29          | WAIT value_list
+   30          | REMARK remark_text
+
+   31 constant_list: constant VIRGULA constant_list
+   32              | constant
+
+   33 integer_list: INTEGER VIRGULA integer_list
+   34             | INTEGER
+
+   35 expression: and_exp OR expression
+   36           | and_exp
+
+   37 value: LPAREN expression RPAREN
+   38      | ID
+   39      | ID LPAREN expression_list RPAREN
+   40      | constant
+
+   41 access: INPUT
+   42       | OUTPUT
+
+   43 id_list: ID VIRGULA id_list
+   44        | ID
+
+   45 expression_list: expression VIRGULA expression_list
+   46                | expression
+
+   47 value_list: value VIRGULA value_list
+   48           | value
+
+   49 print_list: expression PONTO_VIRGULA print_list
+   50           | expression
+   51           | /* empty */
+
+   52 and_exp: not_exp AND and_exp
+   53        | not_exp
+
+   54 not_exp: NOT compare_exp
+   55        | compare_exp
+
+   56 compare_exp: add_exp EQUAL compare_exp
+   57            | add_exp NOT_EQUAL compare_exp
+   58            | add_exp MAIOR_QUE compare_exp
+   59            | add_exp MAIOR_IGUAL compare_exp
+   60            | add_exp MENOR_QUE compare_exp
+   61            | add_exp MENOR_IGUAL compare_exp
+   62            | add_exp
+
+   63 add_exp: mult_exp PLUS add_exp
+   64        | mult_exp MINUS add_exp
+   65        | mult_exp
+
+   66 mult_exp: negate_exp MULT mult_exp
+   67         | negate_exp DIV mult_exp
+   68         | negate_exp
+
+   69 negate_exp: MINUS power_exp
+   70           | power_exp
+
+   71 power_exp: power_exp POW value
+   72          | value
+
+   73 constant: INTEGER
+   74         | STRING
+   75         | REAL
+
+   76 remark_text: REMARK_STRING
+   77            | remark_text REMARK_STRING
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+INTEGER (258) 2 3 6 11 16 19 22 33 34 73
+REAL (259) 75
+STRING (260) 74
+ID (261) 8 10 11 17 38 39 43 44
+REMARK_STRING (262) 76 77
+PLUS (263) 63
+MINUS (264) 64 69
+MULT (265) 66
+DIV (266) 67
+POW (267) 71
+LPAREN (268) 8 37 39
+RPAREN (269) 8 37 39
+DOIS_PONTOS (270) 4
+PONTO_VIRGULA (271) 49
+VIRGULA (272) 16 22 31 33 43 45 47
+PONTO (273)
+HASH (274) 6 16 19 22
+NEWLINE (275) 2 3
+NOT_EQUAL (276) 57
+EQUAL (277) 10 11 17 56
+MENOR_IGUAL (278) 61
+MAIOR_IGUAL (279) 59
+MENOR_QUE (280) 60
+MAIOR_QUE (281) 58
+REMARK (282) 30
+PRINT (283) 21 22
+LET (284) 17
+IF (285) 14
+THEN (286) 14
+GOTO (287) 12
+STOP (288) 27
+RUN (289) 26
+END (290) 9
+DIM (291) 8
+DATA (292) 7
+CLOSE (293) 6
+FOR (294) 10 11 19
+TO (295) 10 11
+STEP (296) 11
+INPUT (297) 15 16 41
+OUTPUT (298) 42
+GOSUB (299) 13
+NEXT (300) 18
+OPEN (301) 19
+AS (302) 19
+POKE (303) 20
+RETURN (304) 24
+READ (305) 23
+RESTORE (306) 25
+SYS (307) 28
+WAIT (308) 29
+OR (309) 35
+AND (310) 52
+NOT (311) 54
+
+
+Nonterminals, with rules where they appear
+
+$accept (57)
+    on left: 0
+program (58)
+    on left: 1, on right: 0
+lines (59)
+    on left: 2 3, on right: 1 2
+statements (60)
+    on left: 4 5, on right: 2 3 4
+statement (61)
+    on left: 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25
+    26 27 28 29 30, on right: 4 5 14
+constant_list (62)
+    on left: 31 32, on right: 7 31
+integer_list (63)
+    on left: 33 34, on right: 8 33
+expression (64)
+    on left: 35 36, on right: 10 11 12 13 14 17 35 37 45 46 49 50
+value (65)
+    on left: 37 38 39 40, on right: 19 28 47 48 71 72
+access (66)
+    on left: 41 42, on right: 19
+id_list (67)
+    on left: 43 44, on right: 15 16 18 23 43
+expression_list (68)
+    on left: 45 46, on right: 39 45
+value_list (69)
+    on left: 47 48, on right: 20 29 47
+print_list (70)
+    on left: 49 50 51, on right: 21 22 49
+and_exp (71)
+    on left: 52 53, on right: 35 36 52
+not_exp (72)
+    on left: 54 55, on right: 52 53
+compare_exp (73)
+    on left: 56 57 58 59 60 61 62, on right: 54 55 56 57 58 59 60 61
+add_exp (74)
+    on left: 63 64 65, on right: 56 57 58 59 60 61 62 63 64
+mult_exp (75)
+    on left: 66 67 68, on right: 63 64 65 66 67
+negate_exp (76)
+    on left: 69 70, on right: 66 67 68
+power_exp (77)
+    on left: 71 72, on right: 69 70 71
+constant (78)
+    on left: 73 74 75, on right: 31 32 40
+remark_text (79)
+    on left: 76 77, on right: 30 77
+
+
+state 0
+
+    0 $accept: . program $end
+
+    INTEGER  shift, and go to state 1
+
+    program  go to state 2
+    lines    go to state 3
+
+
+state 1
+
+    2 lines: INTEGER . statements NEWLINE lines
+    3      | INTEGER . statements NEWLINE
+
+    REMARK   shift, and go to state 4
+    PRINT    shift, and go to state 5
+    LET      shift, and go to state 6
+    IF       shift, and go to state 7
+    GOTO     shift, and go to state 8
+    STOP     shift, and go to state 9
+    RUN      shift, and go to state 10
+    END      shift, and go to state 11
+    DIM      shift, and go to state 12
+    DATA     shift, and go to state 13
+    CLOSE    shift, and go to state 14
+    FOR      shift, and go to state 15
+    INPUT    shift, and go to state 16
+    GOSUB    shift, and go to state 17
+    NEXT     shift, and go to state 18
+    OPEN     shift, and go to state 19
+    POKE     shift, and go to state 20
+    RETURN   shift, and go to state 21
+    READ     shift, and go to state 22
+    RESTORE  shift, and go to state 23
+    SYS      shift, and go to state 24
+    WAIT     shift, and go to state 25
+
+    statements  go to state 26
+    statement   go to state 27
+
+
+state 2
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 28
+
+
+state 3
+
+    1 program: lines .
+
+    $default  reduce using rule 1 (program)
+
+
+state 4
+
+   30 statement: REMARK . remark_text
+
+    REMARK_STRING  shift, and go to state 29
+
+    remark_text  go to state 30
+
+
+state 5
+
+   21 statement: PRINT . print_list
+   22          | PRINT . HASH INTEGER VIRGULA print_list
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+    ID       shift, and go to state 34
+    MINUS    shift, and go to state 35
+    LPAREN   shift, and go to state 36
+    HASH     shift, and go to state 37
+    NOT      shift, and go to state 38
+
+    $default  reduce using rule 51 (print_list)
+
+    expression   go to state 39
+    value        go to state 40
+    print_list   go to state 41
+    and_exp      go to state 42
+    not_exp      go to state 43
+    compare_exp  go to state 44
+    add_exp      go to state 45
+    mult_exp     go to state 46
+    negate_exp   go to state 47
+    power_exp    go to state 48
+    constant     go to state 49
+
+
+state 6
+
+   17 statement: LET . ID EQUAL expression
+
+    ID  shift, and go to state 50
+
+
+state 7
+
+   14 statement: IF . expression THEN statement
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+    ID       shift, and go to state 34
+    MINUS    shift, and go to state 35
+    LPAREN   shift, and go to state 36
+    NOT      shift, and go to state 38
+
+    expression   go to state 51
+    value        go to state 40
+    and_exp      go to state 42
+    not_exp      go to state 43
+    compare_exp  go to state 44
+    add_exp      go to state 45
+    mult_exp     go to state 46
+    negate_exp   go to state 47
+    power_exp    go to state 48
+    constant     go to state 49
+
+
+state 8
+
+   12 statement: GOTO . expression
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+    ID       shift, and go to state 34
+    MINUS    shift, and go to state 35
+    LPAREN   shift, and go to state 36
+    NOT      shift, and go to state 38
+
+    expression   go to state 52
+    value        go to state 40
+    and_exp      go to state 42
+    not_exp      go to state 43
+    compare_exp  go to state 44
+    add_exp      go to state 45
+    mult_exp     go to state 46
+    negate_exp   go to state 47
+    power_exp    go to state 48
+    constant     go to state 49
+
+
+state 9
+
+   27 statement: STOP .
+
+    $default  reduce using rule 27 (statement)
+
+
+state 10
+
+   26 statement: RUN .
+
+    $default  reduce using rule 26 (statement)
+
+
+state 11
+
+    9 statement: END .
+
+    $default  reduce using rule 9 (statement)
+
+
+state 12
+
+    8 statement: DIM . ID LPAREN integer_list RPAREN
+
+    ID  shift, and go to state 53
+
+
+state 13
+
+    7 statement: DATA . constant_list
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+
+    constant_list  go to state 54
+    constant       go to state 55
+
+
+state 14
+
+    6 statement: CLOSE . HASH INTEGER
+
+    HASH  shift, and go to state 56
+
+
+state 15
+
+   10 statement: FOR . ID EQUAL expression TO expression
+   11          | FOR . ID EQUAL expression TO expression STEP INTEGER
+
+    ID  shift, and go to state 57
+
+
+state 16
+
+   15 statement: INPUT . id_list
+   16          | INPUT . HASH INTEGER VIRGULA id_list
+
+    ID    shift, and go to state 58
+    HASH  shift, and go to state 59
+
+    id_list  go to state 60
+
+
+state 17
+
+   13 statement: GOSUB . expression
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+    ID       shift, and go to state 34
+    MINUS    shift, and go to state 35
+    LPAREN   shift, and go to state 36
+    NOT      shift, and go to state 38
+
+    expression   go to state 61
+    value        go to state 40
+    and_exp      go to state 42
+    not_exp      go to state 43
+    compare_exp  go to state 44
+    add_exp      go to state 45
+    mult_exp     go to state 46
+    negate_exp   go to state 47
+    power_exp    go to state 48
+    constant     go to state 49
+
+
+state 18
+
+   18 statement: NEXT . id_list
+
+    ID  shift, and go to state 58
+
+    id_list  go to state 62
+
+
+state 19
+
+   19 statement: OPEN . value FOR access AS HASH INTEGER
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+    ID       shift, and go to state 34
+    LPAREN   shift, and go to state 36
+
+    value     go to state 63
+    constant  go to state 49
+
+
+state 20
+
+   20 statement: POKE . value_list
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+    ID       shift, and go to state 34
+    LPAREN   shift, and go to state 36
+
+    value       go to state 64
+    value_list  go to state 65
+    constant    go to state 49
+
+
+state 21
+
+   24 statement: RETURN .
+
+    $default  reduce using rule 24 (statement)
+
+
+state 22
+
+   23 statement: READ . id_list
+
+    ID  shift, and go to state 58
+
+    id_list  go to state 66
+
+
+state 23
+
+   25 statement: RESTORE .
+
+    $default  reduce using rule 25 (statement)
+
+
+state 24
+
+   28 statement: SYS . value
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+    ID       shift, and go to state 34
+    LPAREN   shift, and go to state 36
+
+    value     go to state 67
+    constant  go to state 49
+
+
+state 25
+
+   29 statement: WAIT . value_list
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+    ID       shift, and go to state 34
+    LPAREN   shift, and go to state 36
+
+    value       go to state 64
+    value_list  go to state 68
+    constant    go to state 49
+
+
+state 26
+
+    2 lines: INTEGER statements . NEWLINE lines
+    3      | INTEGER statements . NEWLINE
+
+    NEWLINE  shift, and go to state 69
+
+
+state 27
+
+    4 statements: statement . DOIS_PONTOS statements
+    5           | statement .
+
+    DOIS_PONTOS  shift, and go to state 70
+
+    $default  reduce using rule 5 (statements)
+
+
+state 28
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+state 29
+
+   76 remark_text: REMARK_STRING .
+
+    $default  reduce using rule 76 (remark_text)
+
+
+state 30
+
+   30 statement: REMARK remark_text .
+   77 remark_text: remark_text . REMARK_STRING
+
+    REMARK_STRING  shift, and go to state 71
+
+    $default  reduce using rule 30 (statement)
+
+
+state 31
+
+   73 constant: INTEGER .
+
+    $default  reduce using rule 73 (constant)
+
+
+state 32
+
+   75 constant: REAL .
+
+    $default  reduce using rule 75 (constant)
+
+
+state 33
+
+   74 constant: STRING .
+
+    $default  reduce using rule 74 (constant)
+
+
+state 34
+
+   38 value: ID .
+   39      | ID . LPAREN expression_list RPAREN
+
+    LPAREN  shift, and go to state 72
+
+    $default  reduce using rule 38 (value)
+
+
+state 35
+
+   69 negate_exp: MINUS . power_exp
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+    ID       shift, and go to state 34
+    LPAREN   shift, and go to state 36
+
+    value      go to state 40
+    power_exp  go to state 73
+    constant   go to state 49
+
+
+state 36
+
+   37 value: LPAREN . expression RPAREN
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+    ID       shift, and go to state 34
+    MINUS    shift, and go to state 35
+    LPAREN   shift, and go to state 36
+    NOT      shift, and go to state 38
+
+    expression   go to state 74
+    value        go to state 40
+    and_exp      go to state 42
+    not_exp      go to state 43
+    compare_exp  go to state 44
+    add_exp      go to state 45
+    mult_exp     go to state 46
+    negate_exp   go to state 47
+    power_exp    go to state 48
+    constant     go to state 49
+
+
+state 37
+
+   22 statement: PRINT HASH . INTEGER VIRGULA print_list
+
+    INTEGER  shift, and go to state 75
+
+
+state 38
+
+   54 not_exp: NOT . compare_exp
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+    ID       shift, and go to state 34
+    MINUS    shift, and go to state 35
+    LPAREN   shift, and go to state 36
+
+    value        go to state 40
+    compare_exp  go to state 76
+    add_exp      go to state 45
+    mult_exp     go to state 46
+    negate_exp   go to state 47
+    power_exp    go to state 48
+    constant     go to state 49
+
+
+state 39
+
+   49 print_list: expression . PONTO_VIRGULA print_list
+   50           | expression .
+
+    PONTO_VIRGULA  shift, and go to state 77
+
+    $default  reduce using rule 50 (print_list)
+
+
+state 40
+
+   72 power_exp: value .
+
+    $default  reduce using rule 72 (power_exp)
+
+
+state 41
+
+   21 statement: PRINT print_list .
+
+    $default  reduce using rule 21 (statement)
+
+
+state 42
+
+   35 expression: and_exp . OR expression
+   36           | and_exp .
+
+    OR  shift, and go to state 78
+
+    $default  reduce using rule 36 (expression)
+
+
+state 43
+
+   52 and_exp: not_exp . AND and_exp
+   53        | not_exp .
+
+    AND  shift, and go to state 79
+
+    $default  reduce using rule 53 (and_exp)
+
+
+state 44
+
+   55 not_exp: compare_exp .
+
+    $default  reduce using rule 55 (not_exp)
+
+
+state 45
+
+   56 compare_exp: add_exp . EQUAL compare_exp
+   57            | add_exp . NOT_EQUAL compare_exp
+   58            | add_exp . MAIOR_QUE compare_exp
+   59            | add_exp . MAIOR_IGUAL compare_exp
+   60            | add_exp . MENOR_QUE compare_exp
+   61            | add_exp . MENOR_IGUAL compare_exp
+   62            | add_exp .
+
+    NOT_EQUAL    shift, and go to state 80
+    EQUAL        shift, and go to state 81
+    MENOR_IGUAL  shift, and go to state 82
+    MAIOR_IGUAL  shift, and go to state 83
+    MENOR_QUE    shift, and go to state 84
+    MAIOR_QUE    shift, and go to state 85
+
+    $default  reduce using rule 62 (compare_exp)
+
+
+state 46
+
+   63 add_exp: mult_exp . PLUS add_exp
+   64        | mult_exp . MINUS add_exp
+   65        | mult_exp .
+
+    PLUS   shift, and go to state 86
+    MINUS  shift, and go to state 87
+
+    $default  reduce using rule 65 (add_exp)
+
+
+state 47
+
+   66 mult_exp: negate_exp . MULT mult_exp
+   67         | negate_exp . DIV mult_exp
+   68         | negate_exp .
+
+    MULT  shift, and go to state 88
+    DIV   shift, and go to state 89
+
+    $default  reduce using rule 68 (mult_exp)
+
+
+state 48
+
+   70 negate_exp: power_exp .
+   71 power_exp: power_exp . POW value
+
+    POW  shift, and go to state 90
+
+    $default  reduce using rule 70 (negate_exp)
+
+
+state 49
+
+   40 value: constant .
+
+    $default  reduce using rule 40 (value)
+
+
+state 50
+
+   17 statement: LET ID . EQUAL expression
+
+    EQUAL  shift, and go to state 91
+
+
+state 51
+
+   14 statement: IF expression . THEN statement
+
+    THEN  shift, and go to state 92
+
+
+state 52
+
+   12 statement: GOTO expression .
+
+    $default  reduce using rule 12 (statement)
+
+
+state 53
+
+    8 statement: DIM ID . LPAREN integer_list RPAREN
+
+    LPAREN  shift, and go to state 93
+
+
+state 54
+
+    7 statement: DATA constant_list .
+
+    $default  reduce using rule 7 (statement)
+
+
+state 55
+
+   31 constant_list: constant . VIRGULA constant_list
+   32              | constant .
+
+    VIRGULA  shift, and go to state 94
+
+    $default  reduce using rule 32 (constant_list)
+
+
+state 56
+
+    6 statement: CLOSE HASH . INTEGER
+
+    INTEGER  shift, and go to state 95
+
+
+state 57
+
+   10 statement: FOR ID . EQUAL expression TO expression
+   11          | FOR ID . EQUAL expression TO expression STEP INTEGER
+
+    EQUAL  shift, and go to state 96
+
+
+state 58
+
+   43 id_list: ID . VIRGULA id_list
+   44        | ID .
+
+    VIRGULA  shift, and go to state 97
+
+    $default  reduce using rule 44 (id_list)
+
+
+state 59
+
+   16 statement: INPUT HASH . INTEGER VIRGULA id_list
+
+    INTEGER  shift, and go to state 98
+
+
+state 60
+
+   15 statement: INPUT id_list .
+
+    $default  reduce using rule 15 (statement)
+
+
+state 61
+
+   13 statement: GOSUB expression .
+
+    $default  reduce using rule 13 (statement)
+
+
+state 62
+
+   18 statement: NEXT id_list .
+
+    $default  reduce using rule 18 (statement)
+
+
+state 63
+
+   19 statement: OPEN value . FOR access AS HASH INTEGER
+
+    FOR  shift, and go to state 99
+
+
+state 64
+
+   47 value_list: value . VIRGULA value_list
+   48           | value .
+
+    VIRGULA  shift, and go to state 100
+
+    $default  reduce using rule 48 (value_list)
+
+
+state 65
+
+   20 statement: POKE value_list .
+
+    $default  reduce using rule 20 (statement)
+
+
+state 66
+
+   23 statement: READ id_list .
+
+    $default  reduce using rule 23 (statement)
+
+
+state 67
+
+   28 statement: SYS value .
+
+    $default  reduce using rule 28 (statement)
+
+
+state 68
+
+   29 statement: WAIT value_list .
+
+    $default  reduce using rule 29 (statement)
+
+
+state 69
+
+    2 lines: INTEGER statements NEWLINE . lines
+    3      | INTEGER statements NEWLINE .
+
+    INTEGER  shift, and go to state 1
+
+    $default  reduce using rule 3 (lines)
+
+    lines  go to state 101
+
+
+state 70
+
+    4 statements: statement DOIS_PONTOS . statements
+
+    REMARK   shift, and go to state 4
+    PRINT    shift, and go to state 5
+    LET      shift, and go to state 6
+    IF       shift, and go to state 7
+    GOTO     shift, and go to state 8
+    STOP     shift, and go to state 9
+    RUN      shift, and go to state 10
+    END      shift, and go to state 11
+    DIM      shift, and go to state 12
+    DATA     shift, and go to state 13
+    CLOSE    shift, and go to state 14
+    FOR      shift, and go to state 15
+    INPUT    shift, and go to state 16
+    GOSUB    shift, and go to state 17
+    NEXT     shift, and go to state 18
+    OPEN     shift, and go to state 19
+    POKE     shift, and go to state 20
+    RETURN   shift, and go to state 21
+    READ     shift, and go to state 22
+    RESTORE  shift, and go to state 23
+    SYS      shift, and go to state 24
+    WAIT     shift, and go to state 25
+
+    statements  go to state 102
+    statement   go to state 27
+
+
+state 71
+
+   77 remark_text: remark_text REMARK_STRING .
+
+    $default  reduce using rule 77 (remark_text)
+
+
+state 72
+
+   39 value: ID LPAREN . expression_list RPAREN
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+    ID       shift, and go to state 34
+    MINUS    shift, and go to state 35
+    LPAREN   shift, and go to state 36
+    NOT      shift, and go to state 38
+
+    expression       go to state 103
+    value            go to state 40
+    expression_list  go to state 104
+    and_exp          go to state 42
+    not_exp          go to state 43
+    compare_exp      go to state 44
+    add_exp          go to state 45
+    mult_exp         go to state 46
+    negate_exp       go to state 47
+    power_exp        go to state 48
+    constant         go to state 49
+
+
+state 73
+
+   69 negate_exp: MINUS power_exp .
+   71 power_exp: power_exp . POW value
+
+    POW  shift, and go to state 90
+
+    $default  reduce using rule 69 (negate_exp)
+
+
+state 74
+
+   37 value: LPAREN expression . RPAREN
+
+    RPAREN  shift, and go to state 105
+
+
+state 75
+
+   22 statement: PRINT HASH INTEGER . VIRGULA print_list
+
+    VIRGULA  shift, and go to state 106
+
+
+state 76
+
+   54 not_exp: NOT compare_exp .
+
+    $default  reduce using rule 54 (not_exp)
+
+
+state 77
+
+   49 print_list: expression PONTO_VIRGULA . print_list
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+    ID       shift, and go to state 34
+    MINUS    shift, and go to state 35
+    LPAREN   shift, and go to state 36
+    NOT      shift, and go to state 38
+
+    $default  reduce using rule 51 (print_list)
+
+    expression   go to state 39
+    value        go to state 40
+    print_list   go to state 107
+    and_exp      go to state 42
+    not_exp      go to state 43
+    compare_exp  go to state 44
+    add_exp      go to state 45
+    mult_exp     go to state 46
+    negate_exp   go to state 47
+    power_exp    go to state 48
+    constant     go to state 49
+
+
+state 78
+
+   35 expression: and_exp OR . expression
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+    ID       shift, and go to state 34
+    MINUS    shift, and go to state 35
+    LPAREN   shift, and go to state 36
+    NOT      shift, and go to state 38
+
+    expression   go to state 108
+    value        go to state 40
+    and_exp      go to state 42
+    not_exp      go to state 43
+    compare_exp  go to state 44
+    add_exp      go to state 45
+    mult_exp     go to state 46
+    negate_exp   go to state 47
+    power_exp    go to state 48
+    constant     go to state 49
+
+
+state 79
+
+   52 and_exp: not_exp AND . and_exp
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+    ID       shift, and go to state 34
+    MINUS    shift, and go to state 35
+    LPAREN   shift, and go to state 36
+    NOT      shift, and go to state 38
+
+    value        go to state 40
+    and_exp      go to state 109
+    not_exp      go to state 43
+    compare_exp  go to state 44
+    add_exp      go to state 45
+    mult_exp     go to state 46
+    negate_exp   go to state 47
+    power_exp    go to state 48
+    constant     go to state 49
+
+
+state 80
+
+   57 compare_exp: add_exp NOT_EQUAL . compare_exp
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+    ID       shift, and go to state 34
+    MINUS    shift, and go to state 35
+    LPAREN   shift, and go to state 36
+
+    value        go to state 40
+    compare_exp  go to state 110
+    add_exp      go to state 45
+    mult_exp     go to state 46
+    negate_exp   go to state 47
+    power_exp    go to state 48
+    constant     go to state 49
+
+
+state 81
+
+   56 compare_exp: add_exp EQUAL . compare_exp
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+    ID       shift, and go to state 34
+    MINUS    shift, and go to state 35
+    LPAREN   shift, and go to state 36
+
+    value        go to state 40
+    compare_exp  go to state 111
+    add_exp      go to state 45
+    mult_exp     go to state 46
+    negate_exp   go to state 47
+    power_exp    go to state 48
+    constant     go to state 49
+
+
+state 82
+
+   61 compare_exp: add_exp MENOR_IGUAL . compare_exp
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+    ID       shift, and go to state 34
+    MINUS    shift, and go to state 35
+    LPAREN   shift, and go to state 36
+
+    value        go to state 40
+    compare_exp  go to state 112
+    add_exp      go to state 45
+    mult_exp     go to state 46
+    negate_exp   go to state 47
+    power_exp    go to state 48
+    constant     go to state 49
+
+
+state 83
+
+   59 compare_exp: add_exp MAIOR_IGUAL . compare_exp
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+    ID       shift, and go to state 34
+    MINUS    shift, and go to state 35
+    LPAREN   shift, and go to state 36
+
+    value        go to state 40
+    compare_exp  go to state 113
+    add_exp      go to state 45
+    mult_exp     go to state 46
+    negate_exp   go to state 47
+    power_exp    go to state 48
+    constant     go to state 49
+
+
+state 84
+
+   60 compare_exp: add_exp MENOR_QUE . compare_exp
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+    ID       shift, and go to state 34
+    MINUS    shift, and go to state 35
+    LPAREN   shift, and go to state 36
+
+    value        go to state 40
+    compare_exp  go to state 114
+    add_exp      go to state 45
+    mult_exp     go to state 46
+    negate_exp   go to state 47
+    power_exp    go to state 48
+    constant     go to state 49
+
+
+state 85
+
+   58 compare_exp: add_exp MAIOR_QUE . compare_exp
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+    ID       shift, and go to state 34
+    MINUS    shift, and go to state 35
+    LPAREN   shift, and go to state 36
+
+    value        go to state 40
+    compare_exp  go to state 115
+    add_exp      go to state 45
+    mult_exp     go to state 46
+    negate_exp   go to state 47
+    power_exp    go to state 48
+    constant     go to state 49
+
+
+state 86
+
+   63 add_exp: mult_exp PLUS . add_exp
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+    ID       shift, and go to state 34
+    MINUS    shift, and go to state 35
+    LPAREN   shift, and go to state 36
+
+    value       go to state 40
+    add_exp     go to state 116
+    mult_exp    go to state 46
+    negate_exp  go to state 47
+    power_exp   go to state 48
+    constant    go to state 49
+
+
+state 87
+
+   64 add_exp: mult_exp MINUS . add_exp
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+    ID       shift, and go to state 34
+    MINUS    shift, and go to state 35
+    LPAREN   shift, and go to state 36
+
+    value       go to state 40
+    add_exp     go to state 117
+    mult_exp    go to state 46
+    negate_exp  go to state 47
+    power_exp   go to state 48
+    constant    go to state 49
+
+
+state 88
+
+   66 mult_exp: negate_exp MULT . mult_exp
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+    ID       shift, and go to state 34
+    MINUS    shift, and go to state 35
+    LPAREN   shift, and go to state 36
+
+    value       go to state 40
+    mult_exp    go to state 118
+    negate_exp  go to state 47
+    power_exp   go to state 48
+    constant    go to state 49
+
+
+state 89
+
+   67 mult_exp: negate_exp DIV . mult_exp
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+    ID       shift, and go to state 34
+    MINUS    shift, and go to state 35
+    LPAREN   shift, and go to state 36
+
+    value       go to state 40
+    mult_exp    go to state 119
+    negate_exp  go to state 47
+    power_exp   go to state 48
+    constant    go to state 49
+
+
+state 90
+
+   71 power_exp: power_exp POW . value
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+    ID       shift, and go to state 34
+    LPAREN   shift, and go to state 36
+
+    value     go to state 120
+    constant  go to state 49
+
+
+state 91
+
+   17 statement: LET ID EQUAL . expression
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+    ID       shift, and go to state 34
+    MINUS    shift, and go to state 35
+    LPAREN   shift, and go to state 36
+    NOT      shift, and go to state 38
+
+    expression   go to state 121
+    value        go to state 40
+    and_exp      go to state 42
+    not_exp      go to state 43
+    compare_exp  go to state 44
+    add_exp      go to state 45
+    mult_exp     go to state 46
+    negate_exp   go to state 47
+    power_exp    go to state 48
+    constant     go to state 49
+
+
+state 92
+
+   14 statement: IF expression THEN . statement
+
+    REMARK   shift, and go to state 4
+    PRINT    shift, and go to state 5
+    LET      shift, and go to state 6
+    IF       shift, and go to state 7
+    GOTO     shift, and go to state 8
+    STOP     shift, and go to state 9
+    RUN      shift, and go to state 10
+    END      shift, and go to state 11
+    DIM      shift, and go to state 12
+    DATA     shift, and go to state 13
+    CLOSE    shift, and go to state 14
+    FOR      shift, and go to state 15
+    INPUT    shift, and go to state 16
+    GOSUB    shift, and go to state 17
+    NEXT     shift, and go to state 18
+    OPEN     shift, and go to state 19
+    POKE     shift, and go to state 20
+    RETURN   shift, and go to state 21
+    READ     shift, and go to state 22
+    RESTORE  shift, and go to state 23
+    SYS      shift, and go to state 24
+    WAIT     shift, and go to state 25
+
+    statement  go to state 122
+
+
+state 93
+
+    8 statement: DIM ID LPAREN . integer_list RPAREN
+
+    INTEGER  shift, and go to state 123
+
+    integer_list  go to state 124
+
+
+state 94
+
+   31 constant_list: constant VIRGULA . constant_list
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+
+    constant_list  go to state 125
+    constant       go to state 55
+
+
+state 95
+
+    6 statement: CLOSE HASH INTEGER .
+
+    $default  reduce using rule 6 (statement)
+
+
+state 96
+
+   10 statement: FOR ID EQUAL . expression TO expression
+   11          | FOR ID EQUAL . expression TO expression STEP INTEGER
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+    ID       shift, and go to state 34
+    MINUS    shift, and go to state 35
+    LPAREN   shift, and go to state 36
+    NOT      shift, and go to state 38
+
+    expression   go to state 126
+    value        go to state 40
+    and_exp      go to state 42
+    not_exp      go to state 43
+    compare_exp  go to state 44
+    add_exp      go to state 45
+    mult_exp     go to state 46
+    negate_exp   go to state 47
+    power_exp    go to state 48
+    constant     go to state 49
+
+
+state 97
+
+   43 id_list: ID VIRGULA . id_list
+
+    ID  shift, and go to state 58
+
+    id_list  go to state 127
+
+
+state 98
+
+   16 statement: INPUT HASH INTEGER . VIRGULA id_list
+
+    VIRGULA  shift, and go to state 128
+
+
+state 99
+
+   19 statement: OPEN value FOR . access AS HASH INTEGER
+
+    INPUT   shift, and go to state 129
+    OUTPUT  shift, and go to state 130
+
+    access  go to state 131
+
+
+state 100
+
+   47 value_list: value VIRGULA . value_list
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+    ID       shift, and go to state 34
+    LPAREN   shift, and go to state 36
+
+    value       go to state 64
+    value_list  go to state 132
+    constant    go to state 49
+
+
+state 101
+
+    2 lines: INTEGER statements NEWLINE lines .
+
+    $default  reduce using rule 2 (lines)
+
+
+state 102
+
+    4 statements: statement DOIS_PONTOS statements .
+
+    $default  reduce using rule 4 (statements)
+
+
+state 103
+
+   45 expression_list: expression . VIRGULA expression_list
+   46                | expression .
+
+    VIRGULA  shift, and go to state 133
+
+    $default  reduce using rule 46 (expression_list)
+
+
+state 104
+
+   39 value: ID LPAREN expression_list . RPAREN
+
+    RPAREN  shift, and go to state 134
+
+
+state 105
+
+   37 value: LPAREN expression RPAREN .
+
+    $default  reduce using rule 37 (value)
+
+
+state 106
+
+   22 statement: PRINT HASH INTEGER VIRGULA . print_list
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+    ID       shift, and go to state 34
+    MINUS    shift, and go to state 35
+    LPAREN   shift, and go to state 36
+    NOT      shift, and go to state 38
+
+    $default  reduce using rule 51 (print_list)
+
+    expression   go to state 39
+    value        go to state 40
+    print_list   go to state 135
+    and_exp      go to state 42
+    not_exp      go to state 43
+    compare_exp  go to state 44
+    add_exp      go to state 45
+    mult_exp     go to state 46
+    negate_exp   go to state 47
+    power_exp    go to state 48
+    constant     go to state 49
+
+
+state 107
+
+   49 print_list: expression PONTO_VIRGULA print_list .
+
+    $default  reduce using rule 49 (print_list)
+
+
+state 108
+
+   35 expression: and_exp OR expression .
+
+    $default  reduce using rule 35 (expression)
+
+
+state 109
+
+   52 and_exp: not_exp AND and_exp .
+
+    $default  reduce using rule 52 (and_exp)
+
+
+state 110
+
+   57 compare_exp: add_exp NOT_EQUAL compare_exp .
+
+    $default  reduce using rule 57 (compare_exp)
+
+
+state 111
+
+   56 compare_exp: add_exp EQUAL compare_exp .
+
+    $default  reduce using rule 56 (compare_exp)
+
+
+state 112
+
+   61 compare_exp: add_exp MENOR_IGUAL compare_exp .
+
+    $default  reduce using rule 61 (compare_exp)
+
+
+state 113
+
+   59 compare_exp: add_exp MAIOR_IGUAL compare_exp .
+
+    $default  reduce using rule 59 (compare_exp)
+
+
+state 114
+
+   60 compare_exp: add_exp MENOR_QUE compare_exp .
+
+    $default  reduce using rule 60 (compare_exp)
+
+
+state 115
+
+   58 compare_exp: add_exp MAIOR_QUE compare_exp .
+
+    $default  reduce using rule 58 (compare_exp)
+
+
+state 116
+
+   63 add_exp: mult_exp PLUS add_exp .
+
+    $default  reduce using rule 63 (add_exp)
+
+
+state 117
+
+   64 add_exp: mult_exp MINUS add_exp .
+
+    $default  reduce using rule 64 (add_exp)
+
+
+state 118
+
+   66 mult_exp: negate_exp MULT mult_exp .
+
+    $default  reduce using rule 66 (mult_exp)
+
+
+state 119
+
+   67 mult_exp: negate_exp DIV mult_exp .
+
+    $default  reduce using rule 67 (mult_exp)
+
+
+state 120
+
+   71 power_exp: power_exp POW value .
+
+    $default  reduce using rule 71 (power_exp)
+
+
+state 121
+
+   17 statement: LET ID EQUAL expression .
+
+    $default  reduce using rule 17 (statement)
+
+
+state 122
+
+   14 statement: IF expression THEN statement .
+
+    $default  reduce using rule 14 (statement)
+
+
+state 123
+
+   33 integer_list: INTEGER . VIRGULA integer_list
+   34             | INTEGER .
+
+    VIRGULA  shift, and go to state 136
+
+    $default  reduce using rule 34 (integer_list)
+
+
+state 124
+
+    8 statement: DIM ID LPAREN integer_list . RPAREN
+
+    RPAREN  shift, and go to state 137
+
+
+state 125
+
+   31 constant_list: constant VIRGULA constant_list .
+
+    $default  reduce using rule 31 (constant_list)
+
+
+state 126
+
+   10 statement: FOR ID EQUAL expression . TO expression
+   11          | FOR ID EQUAL expression . TO expression STEP INTEGER
+
+    TO  shift, and go to state 138
+
+
+state 127
+
+   43 id_list: ID VIRGULA id_list .
+
+    $default  reduce using rule 43 (id_list)
+
+
+state 128
+
+   16 statement: INPUT HASH INTEGER VIRGULA . id_list
+
+    ID  shift, and go to state 58
+
+    id_list  go to state 139
+
+
+state 129
+
+   41 access: INPUT .
+
+    $default  reduce using rule 41 (access)
+
+
+state 130
+
+   42 access: OUTPUT .
+
+    $default  reduce using rule 42 (access)
+
+
+state 131
+
+   19 statement: OPEN value FOR access . AS HASH INTEGER
+
+    AS  shift, and go to state 140
+
+
+state 132
+
+   47 value_list: value VIRGULA value_list .
+
+    $default  reduce using rule 47 (value_list)
+
+
+state 133
+
+   45 expression_list: expression VIRGULA . expression_list
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+    ID       shift, and go to state 34
+    MINUS    shift, and go to state 35
+    LPAREN   shift, and go to state 36
+    NOT      shift, and go to state 38
+
+    expression       go to state 103
+    value            go to state 40
+    expression_list  go to state 141
+    and_exp          go to state 42
+    not_exp          go to state 43
+    compare_exp      go to state 44
+    add_exp          go to state 45
+    mult_exp         go to state 46
+    negate_exp       go to state 47
+    power_exp        go to state 48
+    constant         go to state 49
+
+
+state 134
+
+   39 value: ID LPAREN expression_list RPAREN .
+
+    $default  reduce using rule 39 (value)
+
+
+state 135
+
+   22 statement: PRINT HASH INTEGER VIRGULA print_list .
+
+    $default  reduce using rule 22 (statement)
+
+
+state 136
+
+   33 integer_list: INTEGER VIRGULA . integer_list
+
+    INTEGER  shift, and go to state 123
+
+    integer_list  go to state 142
+
+
+state 137
+
+    8 statement: DIM ID LPAREN integer_list RPAREN .
+
+    $default  reduce using rule 8 (statement)
+
+
+state 138
+
+   10 statement: FOR ID EQUAL expression TO . expression
+   11          | FOR ID EQUAL expression TO . expression STEP INTEGER
+
+    INTEGER  shift, and go to state 31
+    REAL     shift, and go to state 32
+    STRING   shift, and go to state 33
+    ID       shift, and go to state 34
+    MINUS    shift, and go to state 35
+    LPAREN   shift, and go to state 36
+    NOT      shift, and go to state 38
+
+    expression   go to state 143
+    value        go to state 40
+    and_exp      go to state 42
+    not_exp      go to state 43
+    compare_exp  go to state 44
+    add_exp      go to state 45
+    mult_exp     go to state 46
+    negate_exp   go to state 47
+    power_exp    go to state 48
+    constant     go to state 49
+
+
+state 139
+
+   16 statement: INPUT HASH INTEGER VIRGULA id_list .
+
+    $default  reduce using rule 16 (statement)
+
+
+state 140
+
+   19 statement: OPEN value FOR access AS . HASH INTEGER
+
+    HASH  shift, and go to state 144
+
+
+state 141
+
+   45 expression_list: expression VIRGULA expression_list .
+
+    $default  reduce using rule 45 (expression_list)
+
+
+state 142
+
+   33 integer_list: INTEGER VIRGULA integer_list .
+
+    $default  reduce using rule 33 (integer_list)
+
+
+state 143
+
+   10 statement: FOR ID EQUAL expression TO expression .
+   11          | FOR ID EQUAL expression TO expression . STEP INTEGER
+
+    STEP  shift, and go to state 145
+
+    $default  reduce using rule 10 (statement)
+
+
+state 144
+
+   19 statement: OPEN value FOR access AS HASH . INTEGER
+
+    INTEGER  shift, and go to state 146
+
+
+state 145
+
+   11 statement: FOR ID EQUAL expression TO expression STEP . INTEGER
+
+    INTEGER  shift, and go to state 147
+
+
+state 146
+
+   19 statement: OPEN value FOR access AS HASH INTEGER .
+
+    $default  reduce using rule 19 (statement)
+
+
+state 147
+
+   11 statement: FOR ID EQUAL expression TO expression STEP INTEGER .
+
+    $default  reduce using rule 11 (statement)
