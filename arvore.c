@@ -228,7 +228,6 @@ StatementNode* append_statement_node(StatementNode* list, StatementNode* new_nod
 void print_program_node(ProgramNode* program) {
     LineNode* current_line = program->first_line;
     printf("Program\n");
-    print_branch(3);
     while (current_line) {
         print_line_node(current_line, 1);
         current_line = current_line->next;
@@ -256,6 +255,7 @@ void print_statement_node(StatementNode* statement, int depth) {
             while (print_list) {
                 print_indent(depth + 1);
                 print_expression_node(print_list, depth + 2);
+                printf("\n");
                 print_list = print_list->next;
             }
             break;
@@ -267,13 +267,15 @@ void print_statement_node(StatementNode* statement, int depth) {
             print_indent(depth + 1);
             //printf("Expression: ");
             print_expression_node(statement->statement.let_stmt.expr, depth + 2);
+            printf("\n");
             break;
 
         case 7:
             printf("IF\n");
             print_indent(depth + 1);
             printf("Condition: ");
-            print_expression_node(statement->statement.if_stmt.condition, depth + 2);  // Função auxiliar para imprimir expressões
+            print_expression_node(statement->statement.if_stmt.condition, depth + 2);
+            printf("\n");
             print_indent(depth + 1);
             printf("THEN\n");
             print_statement_node(statement->statement.if_stmt.then_statement, depth + 2);  // Imprimir a declaração associada ao THEN
@@ -283,7 +285,8 @@ void print_statement_node(StatementNode* statement, int depth) {
             printf("GOTO\n");
             print_indent(depth + 1);
             //printf("");
-            print_expression_node(statement->statement.goto_stmt.expr, depth + 2);  // Função auxiliar para imprimir expressões
+            print_expression_node(statement->statement.goto_stmt.expr, depth + 2);
+            printf("\n");
             break;
 
         case 3:
@@ -305,7 +308,8 @@ void print_statement_node(StatementNode* statement, int depth) {
             printf("GOSUB\n");
             print_indent(depth + 1);
             //printf("");
-            print_expression_node(statement->statement.gosub_stmt.expr, depth + 2);  // Função auxiliar para imprimir expressões
+            print_expression_node(statement->statement.gosub_stmt.expr, depth + 2);
+            printf("\n");
             break;
 
         case 15:
@@ -318,10 +322,12 @@ void print_statement_node(StatementNode* statement, int depth) {
             printf("ID: %s\n", statement->statement.for_loop.id);
             print_indent(depth + 1);
             printf("From: ");
-            print_expression_node(statement->statement.for_loop.from_expr, depth + 2);  // Função auxiliar para imprimir expressões
+            print_expression_node(statement->statement.for_loop.from_expr, depth + 2);
+            printf("\n");
             print_indent(depth + 1);
             printf("To: ");
-            print_expression_node(statement->statement.for_loop.to_expr, depth + 2);  // Função auxiliar para imprimir expressões
+            print_expression_node(statement->statement.for_loop.to_expr, depth + 2);
+            printf("\n");
             if (statement->statement.for_loop.step) {
                 print_indent(depth + 1);
                 printf("Step: %d\n", *(statement->statement.for_loop.step));
@@ -391,6 +397,7 @@ void print_statement_node(StatementNode* statement, int depth) {
             print_indent(depth + 1);
            // printf("Expression: ");
             print_expression_node(statement->statement.sys.sys_value, depth + 2);
+            printf("\n");
             break;
 
         case 20:
@@ -398,6 +405,7 @@ void print_statement_node(StatementNode* statement, int depth) {
             print_indent(depth + 1);
             //printf("Expression: ");
             print_expression_node(statement->statement.wait_stmt.value_list, depth + 2);
+            printf("\n");
             break;
         
         case 11:
@@ -407,6 +415,7 @@ void print_statement_node(StatementNode* statement, int depth) {
             // Adapte com base em AccessTypeNode
             //printf("Value: ");
             print_expression_node(statement->statement.open_stmt.value, depth + 2);
+            printf("\n");
             print_indent(depth + 1);
             printf(" %d\n", statement->statement.open_stmt.hash_value);
             break;
@@ -416,6 +425,7 @@ void print_statement_node(StatementNode* statement, int depth) {
             print_indent(depth + 1);
             //printf("Value: ");
             print_expression_node(statement->statement.poke_stmt.value_list, depth + 2);
+            printf("\n");
             break;
 
         default:

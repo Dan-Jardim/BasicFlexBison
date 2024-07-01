@@ -856,274 +856,274 @@ case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
 #line 11 "scanner.l"
-{ printf("Token: NEWLINE\n"); return NEWLINE; }
+{ return NEWLINE; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
 #line 12 "scanner.l"
-{ yylval.strval = strdup(yytext + 3); printf("Token: REMARK_STRING, Value: %s\n", yylval.strval); return REMARK_STRING; }
+{ yylval.strval = strdup(yytext + 3); return REMARK_STRING; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
 #line 13 "scanner.l"
-{ printf("Token: PRINT\n"); return PRINT; }
+{ return PRINT; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
 #line 14 "scanner.l"
-{ printf("Token: LET\n"); return LET; }
+{ return LET; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
 #line 15 "scanner.l"
-{ printf("Token: IF\n"); return IF; }
+{ return IF; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
 #line 16 "scanner.l"
-{ printf("Token: THEN\n"); return THEN; }
+{ return THEN; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
 #line 17 "scanner.l"
-{ printf("Token: GOTO\n"); return GOTO; }
+{ return GOTO; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
 #line 18 "scanner.l"
-{ printf("Token: STOP\n"); return STOP; }
+{ return STOP; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
 #line 19 "scanner.l"
-{ printf("Token: RUN\n"); return RUN; }
+{ return RUN; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
 #line 20 "scanner.l"
-{ printf("Token: END\n"); return END; }
+{ return END; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
 #line 21 "scanner.l"
-{ printf("Token: DIM\n"); return DIM; }
+{ return DIM; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
 #line 22 "scanner.l"
-{ printf("Token: DATA\n"); return DATA; }
+{ return DATA; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
 #line 23 "scanner.l"
-{ printf("Token: CLOSE\n"); return CLOSE; }
+{ return CLOSE; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
 #line 24 "scanner.l"
-{ printf("Token: FOR\n"); return FOR; }
+{ return FOR; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
 #line 25 "scanner.l"
-{ printf("Token: TO\n"); return TO; }
+{ return TO; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
 #line 26 "scanner.l"
-{ printf("Token: STEP\n"); return STEP; }
+{ return STEP; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
 #line 27 "scanner.l"
-{ printf("Token: INPUT\n"); return INPUT; }
+{ return INPUT; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
 #line 28 "scanner.l"
-{ printf("Token: OUTPUT\n"); return OUTPUT; }
+{ return OUTPUT; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
 #line 29 "scanner.l"
-{ printf("Token: GOSUB\n"); return GOSUB; }
+{ return GOSUB; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
 #line 30 "scanner.l"
-{ printf("Token: NEXT\n"); return NEXT; }
+{ return NEXT; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
 #line 31 "scanner.l"
-{ printf("Token: OPEN\n"); return OPEN; }
+{ return OPEN; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
 #line 32 "scanner.l"
-{ printf("Token: AS\n"); return AS; }
+{ return AS; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
 #line 33 "scanner.l"
-{ printf("Token: POKE\n"); return POKE; }
+{ return POKE; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
 #line 34 "scanner.l"
-{ printf("Token: RETURN\n"); return RETURN; }
+{ return RETURN; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
 #line 35 "scanner.l"
-{ printf("Token: READ\n"); return READ; }
+{ return READ; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
 #line 36 "scanner.l"
-{ printf("Token: RESTORE\n"); return RESTORE; }
+{ return RESTORE; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
 #line 37 "scanner.l"
-{ printf("Token: SYS\n"); return SYS; }
+{ return SYS; }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
 #line 38 "scanner.l"
-{ printf("Token: WAIT\n"); return WAIT; }
+{ return WAIT; }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
 #line 39 "scanner.l"
-{ printf("Token: OR\n"); return OR; }
+{ return OR; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
 #line 40 "scanner.l"
-{ printf("Token: AND\n"); return AND; }
+{ return AND; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
 #line 41 "scanner.l"
-{ printf("Token: NOT\n"); return NOT;}
+{ return NOT;}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
 #line 42 "scanner.l"
-{ printf("Token: HASH\n"); return HASH; }
+{ return HASH; }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 45 "scanner.l"
-{ yylval.strval = strdup(yytext); printf("Token: ID, Value: %s\n", yylval.strval); return ID; }
+#line 44 "scanner.l"
+{ yylval.strval = strdup(yytext); return ID; }
 	YY_BREAK
 case 34:
 /* rule 34 can match eol */
 YY_RULE_SETUP
-#line 46 "scanner.l"
-{ yylval.strval = strdup(yytext); printf("Token: STRING, Value: %s\n", yylval.strval); return STRING; }
+#line 45 "scanner.l"
+{ yylval.strval = strdup(yytext); return STRING; }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 47 "scanner.l"
-{ yylval.intval = atoi(yytext); printf("Token: INTEGER, Value: %d\n", yylval.intval); return INTEGER; }
+#line 46 "scanner.l"
+{ yylval.intval = atoi(yytext); return INTEGER; }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 48 "scanner.l"
-{ yylval.realval = atof(yytext); printf("Token: REAL, Value: %f\n", yylval.realval); return REAL; }
+#line 47 "scanner.l"
+{ yylval.realval = atof(yytext); return REAL; }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
 #line 50 "scanner.l"
-{ printf("Token: EQUAL\n"); return EQUAL; }
+{ return EQUAL; }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
 #line 51 "scanner.l"
-{ printf("Token: PLUS\n"); return PLUS; }
+{ return PLUS; }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
 #line 52 "scanner.l"
-{ printf("Token: MINUS\n"); return MINUS; }
+{ return MINUS; }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
 #line 53 "scanner.l"
-{ printf("Token: MULT\n"); return MULT; }
+{ return MULT; }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
 #line 54 "scanner.l"
-{ printf("Token: DIV\n"); return DIV; }
+{ return DIV; }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
 #line 55 "scanner.l"
-{ printf("Token: POW\n"); return POW; }
+{ return POW; }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
 #line 56 "scanner.l"
-{ printf("Token: LPAREN\n"); return LPAREN; }
+{ return LPAREN; }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
 #line 57 "scanner.l"
-{ printf("Token: RPAREN\n"); return RPAREN; }
+{ return RPAREN; }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
 #line 58 "scanner.l"
-{ printf("Token: DOIS_PONTOS\n"); return DOIS_PONTOS; }
+{ return DOIS_PONTOS; }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
 #line 59 "scanner.l"
-{ printf("Token: PONTO_VIRGULA\n"); return PONTO_VIRGULA; }
+{ return PONTO_VIRGULA; }
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
 #line 60 "scanner.l"
-{ printf("Token: VIRGULA\n"); return VIRGULA; }
+{ return VIRGULA; }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
 #line 61 "scanner.l"
-{ printf("Token: PONTO\n"); return PONTO; }
+{ return PONTO; }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
 #line 62 "scanner.l"
-{ printf("Token: NOT_EQUAL\n"); return NOT_EQUAL; }
+{ return NOT_EQUAL; }
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
 #line 63 "scanner.l"
-{ printf("Token: MENOR_IGUAL\n"); return MENOR_IGUAL; }
+{ return MENOR_IGUAL; }
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
 #line 64 "scanner.l"
-{ printf("Token: MAIOR_IGUAL\n"); return MAIOR_IGUAL; }
+{ return MAIOR_IGUAL; }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
 #line 65 "scanner.l"
-{ printf("Token: MENOR_QUE\n"); return MENOR_QUE; }
+{ return MENOR_QUE; }
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
 #line 66 "scanner.l"
-{ printf("Token: MAIOR_QUE\n"); return MAIOR_QUE; }
+{ return MAIOR_QUE; }
 	YY_BREAK
 case 54:
 /* rule 54 can match eol */
 YY_RULE_SETUP
 #line 68 "scanner.l"
-{ /* Ignore whitespace */ }
+{ }
 	YY_BREAK
 case 55:
 YY_RULE_SETUP

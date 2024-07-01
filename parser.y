@@ -5,6 +5,7 @@
 #include <string.h>
 #include <math.h>
 #include "arvore.h"
+#include "python.h"
 
 
 extern FILE *yyin;
@@ -77,7 +78,8 @@ statement : CLOSE HASH INTEGER { $$ = create_close_statement($3, 0); }
           | DATA constant_list { $$ = create_data_statement($2); }
           | DIM ID LPAREN integer_list RPAREN { $$ = create_dim_statement($2, $4); }
           | END { $$ = create_end_statement(); }
-          | FOR ID EQUAL expression TO expression { $$ = create_for_statement($2, $4, $6, NULL); }
+          | FOR ID EQUAL expression TO expression { 
+            $$ = create_for_statement($2, $4, $6, NULL); }
           | FOR ID EQUAL expression TO expression STEP INTEGER { $$ = create_for_statement($2, $4, $6, &($8)); }
           | GOTO expression { $$ = create_goto_statement($2); }
           | GOSUB expression { $$ = create_gosub_statement($2); }
@@ -143,7 +145,8 @@ value_list:
      ;
 
 print_list:
-     expression PONTO_VIRGULA print_list { $$ = append_expression_node($3, $1); }
+     expression PONTO_VIRGULA print_list {
+        $$ = append_expression_node($3, $1); }
      | expression { $$ = $1; }
      |  { $$ = NULL; }
      ;
@@ -229,6 +232,7 @@ int main(int argc, char **argv) {
 
     if (yyparse() == 0) {
         printf("Análise sintática concluída com sucesso.\n");
+        generate_python_code(root);
         print_program_node(root);
     } else {
         printf("Erro na análise sintática.\n");

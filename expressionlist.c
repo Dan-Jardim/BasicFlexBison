@@ -102,14 +102,13 @@ void print_expression_node(ExpressionNode* expr_node, int depth) {
                 case OP_POW:
                     printf("( ");
                     print_expression_node(expr_node->expr.bin_op.left, depth + 1);
-                    printf(" / ");
+                    printf(" ** ");
                     print_expression_node(expr_node->expr.bin_op.right, depth + 1);
                     printf(" )");
                     break;
                 case OP_NEGATE:
                     printf("( ");
-                    print_expression_node(expr_node->expr.bin_op.left, depth + 1);
-                    printf(" / ");
+                    printf(" - ");
                     print_expression_node(expr_node->expr.bin_op.right, depth + 1);
                     printf(" )");
                     break;
@@ -129,8 +128,7 @@ void print_expression_node(ExpressionNode* expr_node, int depth) {
                     break;
                 case OP_NOT:
                     printf("( ");
-                    print_expression_node(expr_node->expr.bin_op.left, depth + 1);
-                    printf(" / ");
+                    printf(" NOT ");
                     print_expression_node(expr_node->expr.bin_op.right, depth + 1);
                     printf(" )");
                     break;
@@ -144,35 +142,35 @@ void print_expression_node(ExpressionNode* expr_node, int depth) {
                 case OP_NOT_EQUAL:
                     printf("( ");
                     print_expression_node(expr_node->expr.bin_op.left, depth + 1);
-                    printf(" / ");
+                    printf(" <> ");
                     print_expression_node(expr_node->expr.bin_op.right, depth + 1);
                     printf(" )");
                     break;
                 case OP_GREATER_THAN:
                     printf("( ");
                     print_expression_node(expr_node->expr.bin_op.left, depth + 1);
-                    printf(" / ");
+                    printf(" > ");
                     print_expression_node(expr_node->expr.bin_op.right, depth + 1);
                     printf(" )");
                     break;
                 case OP_GREATER_EQUAL:
                     printf("( ");
                     print_expression_node(expr_node->expr.bin_op.left, depth + 1);
-                    printf(" / ");
+                    printf(" >= ");
                     print_expression_node(expr_node->expr.bin_op.right, depth + 1);
                     printf(" )");
                     break;
                 case OP_LESS_THAN:
                     printf("( ");
                     print_expression_node(expr_node->expr.bin_op.left, depth + 1);
-                    printf(" / ");
+                    printf(" <= ");
                     print_expression_node(expr_node->expr.bin_op.right, depth + 1);
                     printf(" )");
                     break;
                 case OP_LESS_EQUAL:
                     printf("( ");
                     print_expression_node(expr_node->expr.bin_op.left, depth + 1);
-                    printf(" / ");
+                    printf(" <= ");
                     print_expression_node(expr_node->expr.bin_op.right, depth + 1);
                     printf(" )");
                     break;

@@ -12,6 +12,10 @@ ConstantNode* create_constant_node(ConstantType type, void* value) {
     ConstantNode* node = (ConstantNode*) malloc(sizeof(ConstantNode));
     node->type = type;
     node->next = NULL;
+
+    node->value.int_val = 0;
+    node->value.str_val = NULL; 
+    node->value.real_val = 0.0; 
     switch (type) {
         case INTEGER_CONST:
             node->value.int_val = *(int*)value;
@@ -46,13 +50,13 @@ void print_constant_node(ConstantNode* const_node) {
 
     switch (const_node->type) {
         case INTEGER_CONST:
-            printf("%d\n", const_node->value.int_val);
+            printf("%d", const_node->value.int_val);
             break;
         case STRING_CONST:
-            printf("%s\n", const_node->value.str_val);
+            printf("%s", const_node->value.str_val);
             break;
         case REAL_CONST:
-            printf("%lf\n", const_node->value.real_val);
+            printf("%lf", const_node->value.real_val);
             break;
         default:
             printf("Unknown constant type\n");
