@@ -65,6 +65,9 @@
     "constantlist.h": "c",
     "stdio.h": "c",
     "utils.h": "c",
-    "printlist.h": "c"
+    "printlist.h": "c",
+    "python.h": "c",
+    "type_traits": "c",
+    "expressionlist.h": "c"
   }
 }

@@ -3,6 +3,7 @@
 
 typedef struct IdNode {
     char* id;
+    
     struct IdNode* next;
 } IdNode;
 

@@ -7,7 +7,6 @@
 #include "arvore.h"
 #include "python.h"
 
-
 extern FILE *yyin;
 
 extern int yylex(void);
@@ -15,6 +14,9 @@ void yyerror(const char *s);
 extern int yylineno;
 extern char *yytext;
 ProgramNode *root;
+
+SymbolTable *symbol_table;
+int error_occurred = 0;
 
 #define YYDEBUG 1
 
@@ -29,9 +31,7 @@ ProgramNode *root;
     char* strval;
     struct ConstantNode* const_list;
     struct IntegerNode* int_list;
-    struct PrintNode* print_list;
 	struct IdNode* id_list;
-	struct ValueNode* value_list;
     struct ExpressionNode* expr_list;
     struct StatementNode* statement;
     struct AccessTypeNode* access_type;
@@ -68,7 +68,7 @@ program:
 
 lines:
      INTEGER statements NEWLINE lines{$$ = create_line_node($1, $2, $4); }
-     | INTEGER statements NEWLINE {$$ = create_line_node($1, $2, NULL); }
+     | INTEGER statements{$$ = create_line_node($1, $2, NULL); }
      ;
 statements:
 	  statement DOIS_PONTOS statements {$$ = append_statement_node($3, $1); }
@@ -76,17 +76,42 @@ statements:
 	  ;
 statement : CLOSE HASH INTEGER { $$ = create_close_statement($3, 0); }
           | DATA constant_list { $$ = create_data_statement($2); }
-          | DIM ID LPAREN integer_list RPAREN { $$ = create_dim_statement($2, $4); }
+          | DIM ID LPAREN integer_list RPAREN { add_variable($2, VAR_ARRAY, symbol_table);$$ = create_dim_statement($2, $4); }
           | END { $$ = create_end_statement(); }
-          | FOR ID EQUAL expression TO expression { 
-            $$ = create_for_statement($2, $4, $6, NULL); }
-          | FOR ID EQUAL expression TO expression STEP INTEGER { $$ = create_for_statement($2, $4, $6, &($8)); }
-          | GOTO expression { $$ = create_goto_statement($2); }
-          | GOSUB expression { $$ = create_gosub_statement($2); }
-          | IF expression THEN statement { $$ = create_if_statement($2, $4); }
-          | INPUT id_list { $$ = create_input_statement($2); }
-          | INPUT HASH INTEGER VIRGULA id_list { $$ = create_input_hash_statement($3, $5); }
-          | LET ID EQUAL expression { $$ = create_let_statement($2, $4); }
+          | FOR ID EQUAL expression TO expression { add_variable($2, VAR_INTEGER, symbol_table);
+                                                    if(check_variable_type($2, VAR_INTEGER, symbol_table)==0){
+                                                        yyerror("Váriavel diferente de inteiro no FOR");
+                                                    };if (get_expression_type($4, symbol_table) != INTEGER_CONST || get_expression_type($6, symbol_table) != INTEGER_CONST) {
+            yyerror("Variável diferente de inteiro no FOR");
+        }
+                                                    $$ = create_for_statement($2, $4, $6, NULL); }
+          | FOR ID EQUAL expression TO expression STEP INTEGER {add_variable($2, VAR_INTEGER, symbol_table);
+                                                    if(check_variable_type($2, VAR_INTEGER, symbol_table)==0){
+                                                        yyerror("Váriavel diferente de inteiro no FOR");
+                                                    };if (get_expression_type($4, symbol_table) != INTEGER_CONST || get_expression_type($6, symbol_table) != INTEGER_CONST) {
+            yyerror("Variável diferente de inteiro no FOR");
+        } $$ = create_for_statement($2, $4, $6, &($8)); }
+          | GOTO expression { if (get_expression_type($2, symbol_table) != INTEGER_CONST) {
+            yyerror("Expressão diferente de inteiro");
+        }$$ = create_goto_statement($2); }
+          | GOSUB expression { if (get_expression_type($2, symbol_table) != INTEGER_CONST) {
+            yyerror("Expressão diferente de inteiro");
+        }$$ = create_gosub_statement($2); }
+          | IF expression THEN statement {if (get_expression_type($2, symbol_table) == STRING_CONST) {
+            yyerror("Expressão inválida para IF");
+        }$$ = create_if_statement($2, $4); }
+          | INPUT id_list { for (IdNode *id = $2; id != NULL; id = id->next) {
+                                add_variable(id->id, VAR_INTEGER, symbol_table);
+                            }$$ = create_input_statement($2); }
+          | INPUT HASH INTEGER VIRGULA id_list { for (IdNode *id = $5; id != NULL; id = id->next) {
+                                add_variable(id->id, VAR_INTEGER, symbol_table);
+                            }$$ = create_input_hash_statement($3, $5); }
+          | LET ID EQUAL expression {   if (find_symbol($2, symbol_table) == NULL) {
+                                            add_variable($2, get_expression_type($4, symbol_table), symbol_table);
+                                        } else {
+                                            check_variable_type($2, get_expression_type($4, symbol_table), symbol_table);
+                                        }
+                                        $$ = create_let_statement($2, $4); }
           | NEXT id_list { $$ = create_next_statement($2); }
           | OPEN value FOR access AS HASH INTEGER { $$ = create_open_statement($2, $4, $7); }
           | POKE value_list { $$ = create_poke_statement($2); }
@@ -113,13 +138,17 @@ integer_list:
 	    ;
 
 expression:
-	and_exp OR expression { $$ = create_expression_node_binary_op(OP_OR, $1, $3); }
+	and_exp OR expression { if (get_expression_type($1, symbol_table) != get_expression_type($3, symbol_table)) {
+                                yyerror("Tipos incompatíveis para disjunção.");}
+                            $$ = create_expression_node_binary_op(OP_OR, $1, $3); }
 	  | and_exp { $$ = $1; }
 	  ;
 
 value:
      LPAREN expression RPAREN { $$ = $2; }
-     | ID { $$ = create_expression_node_variable(create_id_node($1)); } // placeholder
+     | ID { if (find_symbol($1, symbol_table) == NULL) {
+                                            add_variable($1, VAR_INTEGER, symbol_table);
+                                        } $$ = create_expression_node_variable(create_id_node($1)); } 
      | ID LPAREN expression_list RPAREN { $$ = 0; } // placeholder
      | constant { $$ = create_expression_node_constant($1); }
      ;
@@ -152,7 +181,9 @@ print_list:
      ;
 
 and_exp: 
-	not_exp AND and_exp {$$ = create_expression_node_binary_op(OP_AND, $1, $3); }
+	not_exp AND and_exp {if (get_expression_type($1, symbol_table) != get_expression_type($3, symbol_table)) {
+                                yyerror("Tipos incompatíveis para conjunção.");
+                            }$$ = create_expression_node_binary_op(OP_AND, $1, $3); }
        | not_exp { $$ = $1; }
        ;
 
@@ -162,12 +193,24 @@ not_exp:
        ;
 
 compare_exp:
-	add_exp EQUAL compare_exp { $$ = create_expression_node_binary_op(OP_EQUAL, $1, $3); }
-       | add_exp NOT_EQUAL compare_exp { $$ = create_expression_node_binary_op(OP_NOT_EQUAL, $1, $3); }
-       | add_exp MAIOR_QUE compare_exp { $$ = create_expression_node_binary_op(OP_GREATER_THAN, $1, $3); }
-       | add_exp MAIOR_IGUAL compare_exp { $$ = create_expression_node_binary_op(OP_GREATER_EQUAL, $1, $3); }
-       | add_exp MENOR_QUE compare_exp { $$ = create_expression_node_binary_op(OP_LESS_THAN, $1, $3); }
-       | add_exp MENOR_IGUAL compare_exp { $$ = create_expression_node_binary_op(OP_LESS_EQUAL, $1, $3); }
+	add_exp EQUAL compare_exp { if (get_expression_type($1, symbol_table) != get_expression_type($3, symbol_table)) {
+                                yyerror("Tipos incompatíveis para comparação.");
+                            }$$ = create_expression_node_binary_op(OP_EQUAL, $1, $3); }
+       | add_exp NOT_EQUAL compare_exp { if (get_expression_type($1, symbol_table) != get_expression_type($3, symbol_table)) {
+                                yyerror("Tipos incompatíveis para comparação.");
+                            }$$ = create_expression_node_binary_op(OP_NOT_EQUAL, $1, $3); }
+       | add_exp MAIOR_QUE compare_exp { if (get_expression_type($1, symbol_table) != get_expression_type($3, symbol_table)) {
+                                yyerror("Tipos incompatíveis para comparação.");
+                            }$$ = create_expression_node_binary_op(OP_GREATER_THAN, $1, $3); }
+       | add_exp MAIOR_IGUAL compare_exp { if (get_expression_type($1, symbol_table) != get_expression_type($3, symbol_table)) {
+                                yyerror("Tipos incompatíveis para comparação.");
+                            }$$ = create_expression_node_binary_op(OP_GREATER_EQUAL, $1, $3); }
+       | add_exp MENOR_QUE compare_exp { if (get_expression_type($1, symbol_table) != get_expression_type($3, symbol_table)) {
+                                yyerror("Tipos incompatíveis para comparação.");
+                            }$$ = create_expression_node_binary_op(OP_LESS_THAN, $1, $3); }
+       | add_exp MENOR_IGUAL compare_exp { if (get_expression_type($1, symbol_table) != get_expression_type($3, symbol_table)) {
+                                yyerror("Tipos incompatíveis para comparação.");
+                            }$$ = create_expression_node_binary_op(OP_LESS_EQUAL, $1, $3); }
        | add_exp { $$ = $1; }
        ;
 
@@ -175,14 +218,22 @@ compare_exp:
 
 
 add_exp: 
-	mult_exp PLUS add_exp { $$ = create_expression_node_binary_op(OP_ADD, $1, $3); }
-       | mult_exp MINUS add_exp { $$ = create_expression_node_binary_op(OP_SUB, $1, $3); }
+	mult_exp PLUS add_exp { if (get_expression_type($1, symbol_table) != get_expression_type($3, symbol_table)) {
+                                yyerror("Tipos incompatíveis para adição.");
+                            }$$ = create_expression_node_binary_op(OP_ADD, $1, $3); }
+       | mult_exp MINUS add_exp { if (get_expression_type($1, symbol_table) != get_expression_type($3, symbol_table)) {
+                                yyerror("Tipos incompatíveis para subtração.");
+                            }$$ = create_expression_node_binary_op(OP_SUB, $1, $3); }
        | mult_exp { $$ = $1; }
        ;
 
 mult_exp:
-	negate_exp MULT mult_exp { $$ = create_expression_node_binary_op(OP_MUL, $1, $3); }
-	| negate_exp DIV mult_exp { $$ = create_expression_node_binary_op(OP_DIV, $1, $3); }
+	negate_exp MULT mult_exp { if (get_expression_type($1, symbol_table) != get_expression_type($3, symbol_table)) {
+                                yyerror("Tipos incompatíveis para multiplicação.");
+                            }$$ = create_expression_node_binary_op(OP_MUL, $1, $3); }
+	| negate_exp DIV mult_exp { if (get_expression_type($1, symbol_table) != get_expression_type($3, symbol_table)) {
+                                yyerror("Tipos incompatíveis para divisão.");
+                            }$$ = create_expression_node_binary_op(OP_DIV, $1, $3); }
 	| negate_exp { $$ = $1; }
 	;
 negate_exp: 
@@ -191,7 +242,9 @@ negate_exp:
 	  ;
 
 power_exp: 
-	power_exp POW value { $$ = create_expression_node_binary_op(OP_POW, $1, $3); }
+	power_exp POW value { if (get_expression_type($1, symbol_table) != get_expression_type($3, symbol_table)) {
+                                yyerror("Tipos incompatíveis para potenciação.");
+                            }$$ = create_expression_node_binary_op(OP_POW, $1, $3); }
 	| value { $$ = $1; }
 	;
 
@@ -211,6 +264,7 @@ remark_text:
 
 void yyerror(const char *s) {
     fprintf(stderr, "Error: %s at line %d, token '%s'\n", s, yylineno, yytext);
+    error_occurred = 1;
 }
 
 
@@ -229,14 +283,17 @@ int main(int argc, char **argv) {
 
     
     //yydebug = 1;
+    symbol_table = create_symbol_table();
 
-    if (yyparse() == 0) {
+
+    if (yyparse() == 0 && !error_occurred) {
         printf("Análise sintática concluída com sucesso.\n");
         generate_python_code(root);
         print_program_node(root);
     } else {
         printf("Erro na análise sintática.\n");
     }
+    free_symbol_table(symbol_table);
 
     fclose(yyin);
 

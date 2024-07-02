@@ -11,13 +11,13 @@ typedef struct ExpressionNode {
     } type;
 
     union {
-        ConstantNode* constant;  // Para expressões constantes
-        IdNode* variable;        // Para variáveis
+        ConstantNode* constant;  
+        IdNode* variable;        
         struct {
             enum { OP_ADD, OP_SUB, OP_MUL, OP_DIV, OP_POW, OP_NEGATE, OP_AND, OP_OR, OP_NOT, OP_EQUAL, OP_NOT_EQUAL, OP_GREATER_THAN, OP_GREATER_EQUAL, OP_LESS_THAN, OP_LESS_EQUAL } op;
             struct ExpressionNode* left;
             struct ExpressionNode* right;
-        } bin_op;                // Para operações binárias
+        } bin_op;                
     } expr;
 
     struct ExpressionNode* next;

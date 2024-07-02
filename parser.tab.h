@@ -102,16 +102,14 @@ typedef union YYSTYPE
 {
 
 /* Line 1685 of yacc.c  */
-#line 26 "parser.y"
+#line 28 "parser.y"
 
     int intval;          
     double realval;
     char* strval;
     struct ConstantNode* const_list;
     struct IntegerNode* int_list;
-    struct PrintNode* print_list;
 	struct IdNode* id_list;
-	struct ValueNode* value_list;
     struct ExpressionNode* expr_list;
     struct StatementNode* statement;
     struct AccessTypeNode* access_type;
@@ -121,7 +119,7 @@ typedef union YYSTYPE
 
 
 /* Line 1685 of yacc.c  */
-#line 125 "parser.tab.h"
+#line 123 "parser.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

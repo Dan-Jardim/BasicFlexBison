@@ -36,7 +36,7 @@ void generate_python_code(ProgramNode* node) {
 }
 
 void generate_line_code(LineNode *line) {
-    printf("# Line %d\n", line->line_number);
+    //printf("# Line %d\n", line->line_number);
     generate_statement_code(line->statement);
     printf("\n");
 
@@ -66,7 +66,7 @@ void generate_statement_code(StatementNode *stmt) {
             break;
 
         case 5:  // GOTO
-            printf("# GOTO %d\n", (int)stmt->statement.goto_stmt.expr->expr.constant->value.int_val);
+            printf("goto_%d()\n", (int)stmt->statement.goto_stmt.expr->expr.constant->value.int_val);
             break;
 
         case 3:  // END
@@ -74,9 +74,8 @@ void generate_statement_code(StatementNode *stmt) {
             break;
 
         case 8:  // INPUT
-            printf("input(");
             generate_id_list_code(stmt->statement.input_stmt.id_list);
-            printf(")\n");
+            printf(" = input()\n");
             break;
 
         case 21:  // REMARK
@@ -126,7 +125,8 @@ void generate_statement_code(StatementNode *stmt) {
             break;
 
         case 0:  // CLOSE
-            printf("# CLOSE %d, %d\n", stmt->statement.close.hash_value, stmt->statement.close.integer_value);
+            printf("file.close");
+            //printf("# CLOSE %d, %d\n", stmt->statement.close.hash_value, stmt->statement.close.integer_value);
             break;
 
         case 14:  // READ
@@ -152,16 +152,16 @@ void generate_statement_code(StatementNode *stmt) {
             break;
 
         case 11:  // OPEN
-            printf("open(");
+            printf("file = open(");
             generate_expression_code(stmt->statement.open_stmt.value);
             printf(")\n");
-            printf("# OPEN HASH %d\n", stmt->statement.open_stmt.hash_value);
+            //printf("# OPEN HASH %d\n", stmt->statement.open_stmt.hash_value);
             break;
 
         case 12:  // POKE
-            printf("# POKE ");
+            printf("poke_func(");
             generate_value_list_code(stmt->statement.poke_stmt.value_list);
-            printf("\n");
+            printf(")\n");
             break;
 
         default:

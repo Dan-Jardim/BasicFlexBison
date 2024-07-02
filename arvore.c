@@ -4,10 +4,9 @@
 #include "arvore.h"
 #include "constantlist.h"
 #include "integerlist.h"
-#include "printlist.h"
 #include "expressionlist.h"
 #include "idlist.h"
-#include "valuelist.h"
+#include "symbol_table.h"
 
 StatementNode* create_close_statement(int hash_value, int integer_value) {
     StatementNode* node = (StatementNode*) malloc(sizeof(StatementNode));
@@ -227,7 +226,11 @@ StatementNode* append_statement_node(StatementNode* list, StatementNode* new_nod
 
 void print_program_node(ProgramNode* program) {
     LineNode* current_line = program->first_line;
-    printf("Program\n");
+    printf("Program\n|\n");
+    print_indent(1);
+    printf("Lines\n");
+    print_indent(1);
+    printf("|\n");
     while (current_line) {
         print_line_node(current_line, 1);
         current_line = current_line->next;
@@ -235,18 +238,21 @@ void print_program_node(ProgramNode* program) {
 }
 
 void print_line_node(LineNode* line, int depth) {
-    print_indent(depth);
-    printf("Line %d:\n", line->line_number);
+    print_indent(depth+1);
+    printf("Line\n");
+    print_indent(depth+2);
+    printf("LineNumber: %d\n", line->line_number);
+    print_indent(depth+2);
     StatementNode* current_statement = line->statement;
+    printf("Statement:\n");
     while (current_statement) {
-        print_statement_node(current_statement, depth + 1);
+        print_statement_node(current_statement, depth + 3);
         current_statement = current_statement->next;
     }
     printf("\n");
 }
 
 void print_statement_node(StatementNode* statement, int depth) {
-    // Implemente a impressão para cada tipo de declaração
     print_indent(depth);
     switch (statement->type) {
         case 13:
@@ -278,7 +284,7 @@ void print_statement_node(StatementNode* statement, int depth) {
             printf("\n");
             print_indent(depth + 1);
             printf("THEN\n");
-            print_statement_node(statement->statement.if_stmt.then_statement, depth + 2);  // Imprimir a declaração associada ao THEN
+            print_statement_node(statement->statement.if_stmt.then_statement, depth + 2); 
             break;
 
         case 5:
@@ -295,7 +301,7 @@ void print_statement_node(StatementNode* statement, int depth) {
 
         case 8:
             printf("INPUT\n");
-            print_id_node(statement->statement.input_stmt.id_list, depth + 1);  // Função auxiliar para imprimir IDs
+            print_id_node(statement->statement.input_stmt.id_list, depth + 1);  
             break;
 
         case 21:
@@ -385,7 +391,7 @@ void print_statement_node(StatementNode* statement, int depth) {
 
         case 14:
             printf("READ\n");
-            print_id_node(statement->statement.read_stmt.id_list, depth + 1);  // Função auxiliar para imprimir IDs
+            print_id_node(statement->statement.read_stmt.id_list, depth + 1); 
             break;
 
         case 16:
@@ -412,7 +418,11 @@ void print_statement_node(StatementNode* statement, int depth) {
             printf("OPEN statement\n");
             print_indent(depth + 1);
             printf("Access type: ");
-            // Adapte com base em AccessTypeNode
+            if (statement->statement.open_stmt.access->type == ACCESS_INPUT){
+                printf("INPUT");
+            } else if (statement->statement.open_stmt.access->type == ACCESS_OUTPUT){
+                printf("OUTPUT");
+            }
             //printf("Value: ");
             print_expression_node(statement->statement.open_stmt.value, depth + 2);
             printf("\n");
@@ -434,4 +444,15 @@ void print_statement_node(StatementNode* statement, int depth) {
     }
 }
 
+
+int check_variable_type(char *var_name, SymbolType expected_type, SymbolTable* symbol_table) {
+    Symbol *symbol = find_symbol(var_name, symbol_table);
+    if (symbol == NULL) {
+        return 0;
+    }
+    if (symbol->type != expected_type) {
+        return 0;
+    }
+    return 1;
+}
 

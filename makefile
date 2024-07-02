@@ -1,21 +1,21 @@
 # Makefile para compilar o parser e o scanner
 
-# Compilador a ser utilizado
+
 CC = gcc
 
-# Flags de compilação
+
 CFLAGS = -Wall -g -Wno-unused-function
 
-# Lista dos arquivos fonte
-SRCS = parser.y scanner.l constantlist.c integerlist.c printlist.c idlist.c expressionlist.c valuelist.c arvore.c utils.c access.c
 
-# Objetos gerados pelo Bison e pelo Flex
-OBJS = parser.tab.o lex.yy.o constantlist.o integerlist.o printlist.o idlist.o expressionlist.o valuelist.o arvore.o utils.o access.o
+SRCS = parser.y scanner.l constantlist.c integerlist.c idlist.c expressionlist.c arvore.c utils.c access.c python.c symbol_table.c
 
-# Nome do executável a ser gerado
+
+OBJS = parser.tab.o lex.yy.o constantlist.o integerlist.o idlist.o expressionlist.o arvore.o utils.o access.o python.o symbol_table.o
+
+
 EXEC = basic
 
-# Regras do Makefile
+
 
 all: $(EXEC)
 
@@ -34,17 +34,11 @@ constantlist.o: constantlist.c constantlist.h
 integerlist.o: integerlist.c integerlist.h
 	$(CC) $(CFLAGS) -c integerlist.c
 
-printlist.o: printlist.c printlist.h
-	$(CC) $(CFLAGS) -c printlist.c
-
 idlist.o: idlist.c idlist.h
 	$(CC) $(CFLAGS) -c idlist.c
 
 expressionlist.o: expressionlist.c expressionlist.h
 	$(CC) $(CFLAGS) -c expressionlist.c
-
-valuelist.o: valuelist.c valuelist.h
-	$(CC) $(CFLAGS) -c valuelist.c
 
 arvore.o: arvore.c arvore.h
 	$(CC) $(CFLAGS) -c arvore.c
@@ -54,6 +48,12 @@ utils.o: utils.c utils.h
 
 access.o: access.c access.h
 	$(CC) $(CFLAGS) -c access.c
+
+python.o: python.c python.h
+	$(CC) $(CFLAGS) -c python.c
+
+symbol_table.o: symbol_table.c symbol_table.h
+	$(CC) $(CFLAGS) -c symbol_table.c
 
 clean:
 	rm -f $(OBJS) $(EXEC) *.o

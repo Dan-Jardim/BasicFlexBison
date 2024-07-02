@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-// Cria um novo nó para a lista encadeada de AccessType.
 AccessTypeNode* create_access_node(AccessType type) {
     AccessTypeNode* new_node = (AccessTypeNode*)malloc(sizeof(AccessTypeNode));
     if (new_node == NULL) {

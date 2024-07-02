@@ -47,7 +47,7 @@ void print_constant_node(ConstantNode* const_node) {
         printf("Constant node is NULL\n");
         return;
     }
-
+    //printf("\nConstant:");
     switch (const_node->type) {
         case INTEGER_CONST:
             printf("%d", const_node->value.int_val);

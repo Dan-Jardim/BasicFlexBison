@@ -10,7 +10,7 @@ Grammar
     1 program: lines
 
     2 lines: INTEGER statements NEWLINE lines
-    3      | INTEGER statements NEWLINE
+    3      | INTEGER statements
 
     4 statements: statement DOIS_PONTOS statements
     5           | statement
@@ -128,7 +128,7 @@ PONTO_VIRGULA (271) 49
 VIRGULA (272) 16 22 31 33 43 45 47
 PONTO (273)
 HASH (274) 6 16 19 22
-NEWLINE (275) 2 3
+NEWLINE (275) 2
 NOT_EQUAL (276) 57
 EQUAL (277) 10 11 17 56
 MENOR_IGUAL (278) 61
@@ -231,7 +231,7 @@ state 0
 state 1
 
     2 lines: INTEGER . statements NEWLINE lines
-    3      | INTEGER . statements NEWLINE
+    3      | INTEGER . statements
 
     REMARK   shift, and go to state 4
     PRINT    shift, and go to state 5
@@ -550,9 +550,11 @@ state 25
 state 26
 
     2 lines: INTEGER statements . NEWLINE lines
-    3      | INTEGER statements . NEWLINE
+    3      | INTEGER statements .
 
     NEWLINE  shift, and go to state 69
+
+    $default  reduce using rule 3 (lines)
 
 
 state 27
@@ -944,11 +946,8 @@ state 68
 state 69
 
     2 lines: INTEGER statements NEWLINE . lines
-    3      | INTEGER statements NEWLINE .
 
     INTEGER  shift, and go to state 1
-
-    $default  reduce using rule 3 (lines)
 
     lines  go to state 101
 

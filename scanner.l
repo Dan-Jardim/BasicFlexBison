@@ -70,5 +70,3 @@
 .               { printf("Unknown character: %s\n", yytext); }
 
 %%
-
-

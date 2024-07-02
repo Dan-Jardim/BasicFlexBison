@@ -1,14 +1,16 @@
 #ifndef ARVORE_H
 #define ARVORE_H
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "constantlist.h"
 #include "integerlist.h"
-#include "printlist.h"
 #include "expressionlist.h"
 #include "idlist.h"
-#include "valuelist.h"
 #include "utils.h"
 #include "access.h"
+#include "symbol_table.h"
 
 typedef enum {
     CLOSE_STMT,//0
@@ -54,7 +56,7 @@ typedef struct StatementNode {
             char* id;
             ExpressionNode* from_expr;
             ExpressionNode* to_expr;
-            int* step; // Pode ser NULL se não houver STEP
+            int* step; 
         } for_loop;
         struct {
             ExpressionNode* expr;
@@ -88,7 +90,7 @@ typedef struct StatementNode {
             ExpressionNode* sys_value;
         } sys;
     } statement;
-    struct StatementNode* next; // Próximo nó de instrução na lista
+    struct StatementNode* next; 
 } StatementNode;
 
 typedef struct LineNode {
@@ -135,5 +137,8 @@ ProgramNode* create_program_node(LineNode* first_line);
 void print_program_node(ProgramNode* program);
 void print_line_node(LineNode* line, int depth);
 void print_statement_node(StatementNode* statement, int depth);
+int check_variable_type(char *var_name, SymbolType expected_type, SymbolTable* symbol_table);
+
+
 
 #endif
